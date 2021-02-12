@@ -60,7 +60,11 @@ var screenWidth = width;
 var screenHeight = height;
 
 var indexWorld = 0;
-var font = createFont("fantasy",40);
+var gameStart = true;
+
+var fontInventory = createFont("fantasy",40);
+var fontTitleStartMenu = createFont("fantasy",60);
+var fontTextStartMenu = createFont("fantasy",20);
 
 // Front
 var xOrigine = 0;
@@ -112,7 +116,7 @@ var drawInventory = function() {
     var dx = 80;
     var dy = 35;
     
-    textFont(font);
+    textFont(fontInventory);
     fill(0, 0, 0, 175);
     rect(side, side, 300, 300, 30);
     fill(255, 255, 255);
@@ -121,6 +125,17 @@ var drawInventory = function() {
     image(getImage("cute/Key"),oX,oY + dx,iW,iH);
     text(":  " + keyDoor, iW + dx, iH + dy*3);
     
+};
+
+var drawStartMenu = function() {
+    fill(0, 0, 0);
+    rect(0, 0, width, height);
+    
+    fill(255, 255, 255);
+    textFont(fontTitleStartMenu);
+    text("Pixelworld", 70,150);
+    textFont(fontTextStartMenu);
+    text("Press espace to start", 123,288);
 };
 
 // ----------------------------------- DrawWorld ---------------------------------------
@@ -152,6 +167,9 @@ for (var j=0;j<allWorldsFront[indexWorld].length;j++){
 var drawOverlay = function() {
     if (inventoryOpen === true) {
        drawInventory(); 
+    }
+    if (gameStart === true) {
+        drawStartMenu();
     }
 };
 
@@ -201,6 +219,9 @@ keyPressed = function() {
             inventoryOpen = true;
         }
     }
+    if (key.toString() === ' ') {
+        gameStart = false;
+    }
 };
 //-------------------------------- Gestion des touches -------------------------------------
 
@@ -212,7 +233,7 @@ var draw = function() {
     drawHero();
     checkGround();
     drawOverlay();
-    text(hero, 10, 10);
+    // text(hero, 10, 25);
     // text(worldBack[hero[0]][hero[1]-1], 20 ,20);
 
 };
