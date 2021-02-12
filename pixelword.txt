@@ -1,0 +1,176 @@
+background(0, 0, 0);
+//-------------------------------- LES MONDES -----------------------------------------
+var allWorldsBack = [[[0,0,0,0,0,0,0,0],
+                      [0,0,1,0,0,0,0,0],
+                      [0,1,0,0,0,0,0,0],
+                      [0,0,0,0,0,0,0,0],
+                      [0,0,0,0,0,0,0,0],
+                      [0,0,0,0,0,0,0,0],
+                      [0,0,0,0,0,0,0,0],
+                      [0,0,0,0,0,0,0,0]],// monde 1
+                      
+                     [[0,0,0,0,0,0,0,0],
+                      [0,0,1,0,0,0,0,0],
+                      [0,1,0,0,0,0,0,0],
+                      [0,0,0,0,0,0,0,0],
+                      [0,0,0,0,1,0,0,0],
+                      [0,0,0,0,0,0,0,0],
+                      [0,0,1,0,0,0,0,0],
+                      [0,0,0,0,0,0,0,0]],// monde 2
+                      
+                     [[0,0,0,0,0,3,0,0],
+                      [0,0,0,0,0,0,0,0],
+                      [0,1,0,0,0,0,0,0],
+                      [0,0,0,0,0,0,0,0],
+                      [0,0,0,0,2,0,0,0],
+                      [0,0,0,0,0,0,0,0],
+                      [0,0,1,0,0,0,1,0],
+                      [0,0,0,0,0,0,0,0]]];// monde 3
+                      
+var allWorldsFront = [[[0,0,0,0,0,0,0,0],
+                      [0,0,1,0,0,0,0,0],
+                      [0,1,0,0,0,0,0,0],
+                      [0,0,0,0,0,0,0,0],
+                      [0,0,0,0,0,2,0,0],
+                      [0,0,0,0,0,0,0,0],
+                      [0,0,0,0,0,0,0,0],
+                      [3,0,0,0,0,0,0,0]],// monde 1
+                  
+                     [[0,0,0,0,0,0,0,0],
+                      [0,0,1,0,0,0,2,0],
+                      [0,1,0,0,0,0,0,0],
+                      [0,0,0,0,0,0,0,0],
+                      [0,0,0,0,1,0,0,0],
+                      [0,0,0,0,0,0,0,0],
+                      [0,0,1,0,0,0,3,0],
+                      [0,0,0,0,0,0,0,0]],// monde 2
+                       
+                     [[0,0,0,0,0,3,0,0],
+                      [0,0,0,0,0,0,0,0],
+                      [0,1,0,0,0,0,0,0],
+                      [0,0,0,0,0,0,0,0],
+                      [0,0,0,0,2,0,0,0],
+                      [0,0,0,0,0,0,0,0],
+                      [0,0,1,0,0,0,1,0],
+                      [0,0,0,0,0,0,0,0]]];// monde 3
+//------------------------------------------------------------------------------------------
+
+
+var indexWorld = 0;
+// Context
+var screenWidth = width;
+var screenHeight = height;
+
+var ajustementWorld = 60;
+
+// Front
+var xOrigine = 0;
+var yOrigine = 0;
+var side = screenWidth / allWorldsBack[indexWorld].length;
+
+// Hero
+var hero = [0, 3];
+
+// inventory
+var keyDoor = false;
+
+// world Elements
+var obstacle = ["cute/Rock","cute/TreeShort","cute/TreeTall","cute/TreeUgly"];
+// image(getImage("cute/TreeTall")
+
+// DrawElement
+var drawPath = function(i,j) {
+    image(getImage("cute/GrassBlock"),xOrigine+i*(side) ,yOrigine+j*(side) +77 , side, -110);
+};
+var drawObstacle = function(i,j) {
+    image(getImage("cute/Rock"),xOrigine+i*(side) ,yOrigine+j*(side) -28, side ,78);
+};
+var drawKey = function(i,j) {
+    image(getImage("cute/Key"),xOrigine+i*(side) + 5 ,yOrigine+j*(side) -5 ,39,49 );
+
+};
+var drawEnd = function(i,j) {
+    image(getImage("cute/DoorTallClosed"),xOrigine+i*(side) ,yOrigine+j*(side) - 21, side, 74);};
+
+var drawHero = function(i,j) {
+    image(getImage("cute/CharacterBoy"), side * (hero[0]),side * (hero[1]) - 28,46,85);
+};
+
+// DrawWorld
+var drawWorld = function() {
+for (var j=0;j<allWorldsFront[indexWorld].length;j++){
+    for (var i=0;i<allWorldsFront[indexWorld][j].length;i++){
+        drawPath(i,j);
+        if (allWorldsFront[indexWorld][i][j] === 1) {
+        drawObstacle(i,j);
+        }
+        if ((allWorldsFront[indexWorld][i][j] === 2) && (keyDoor === false)) {
+        drawKey(i,j);
+        }
+        if (allWorldsFront[indexWorld][i][j] === 3) {
+        drawEnd(i,j);
+        }
+    }
+
+}
+
+};
+
+// ------------------- function check-ground ----------------------------------------------
+
+var checkGround = function () {
+    if (allWorldsFront[indexWorld][hero[0]][hero[1]] === 2){
+        keyDoor = true;
+    }
+    if (allWorldsFront[indexWorld][hero[0]][hero[1]] === 3 && keyDoor === true){
+        indexWorld++;
+        hero = [0, 3];
+        keyDoor = false;
+    }
+};
+
+//------------------------------heros movement----------------------------
+keyPressed = function() {
+    if (key.toString() === 'z') {
+        if ((allWorldsBack[indexWorld][hero[0]][hero[1]-1] !== 1) && (hero[1] !== 0)) {
+            hero[1] = hero[1]-1;
+        }
+        
+    }
+    if (key.toString() === 'q') {
+        if (allWorldsBack[indexWorld][hero[0]-1][hero[1]] !== 1) {
+        hero[0] = hero[0]-1;
+        }
+        
+    }
+    if (key.toString() === 's') {
+        if ((allWorldsBack[indexWorld][hero[0]][hero[1]+1] !== 1) && (hero[1] !== allWorldsBack[indexWorld].length -1)){
+            hero[1] = hero[1]+1;
+        }
+        
+    }
+    if (key.toString() === 'd') {
+        if (allWorldsBack[indexWorld][hero[0]+1][hero[1]] !== 1) {
+        hero[0] = hero[0]+1;
+        }
+    }
+};
+//-------------------------------- Gestion des touches -------------------------------------
+
+
+
+// GENERATE world
+var draw = function() {
+    drawWorld();
+    drawHero();
+    checkGround();
+    text(hero, 10, 10);
+    // text(worldBack[hero[0]][hero[1]-1], 20 ,20);
+
+};
+
+//-------------------------------------------- code utile a conserver
+// var randomObstacle = floor(random(0, obstacle.length));
+
+
+
