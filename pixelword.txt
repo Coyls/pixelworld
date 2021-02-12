@@ -28,40 +28,39 @@ var allWorldsBack = [[[0,0,0,0,0,0,0,0],
                       [0,0,0,0,0,0,0,0]]];// monde 3
                       
 var allWorldsFront = [[[0,0,0,0,0,0,0,0],
-                      [0,0,1,0,0,0,0,0],
-                      [0,1,0,0,0,0,0,0],
-                      [0,0,0,0,0,0,0,0],
-                      [0,0,0,0,0,2,0,0],
-                      [0,0,0,0,0,0,0,0],
-                      [0,0,0,0,0,0,0,0],
-                      [3,0,0,0,0,0,0,0]],// monde 1
+                       [0,0,1,0,0,0,0,0],
+                       [0,1,0,0,0,0,0,0],
+                       [0,0,0,0,0,0,0,0],
+                       [0,0,0,0,0,2,0,0],
+                       [0,0,0,0,0,0,0,0],
+                       [0,0,0,0,0,0,0,0],
+                       [3,0,0,0,0,0,0,0]],// monde 1
                   
-                     [[0,0,0,0,0,0,0,0],
-                      [0,0,1,0,0,0,2,0],
-                      [0,1,0,0,0,0,0,0],
-                      [0,0,0,0,0,0,0,0],
-                      [0,0,0,0,1,0,0,0],
-                      [0,0,0,0,0,0,0,0],
-                      [0,0,1,0,0,0,3,0],
-                      [0,0,0,0,0,0,0,0]],// monde 2
+                      [[0,0,0,0,0,0,0,0],
+                       [0,0,1,0,0,0,2,0],
+                       [0,1,0,0,0,0,0,0],
+                       [0,0,0,0,0,0,0,0],
+                       [0,0,0,0,1,0,0,0],
+                       [0,0,0,0,0,0,0,0],
+                       [0,0,1,0,0,0,3,0],
+                       [0,0,0,0,0,0,0,0]],// monde 2
                        
-                     [[0,0,0,0,0,3,0,0],
-                      [0,0,0,0,0,0,0,0],
-                      [0,1,0,0,0,0,0,0],
-                      [0,0,0,0,0,0,0,0],
-                      [0,0,0,0,2,0,0,0],
-                      [0,0,0,0,0,0,0,0],
-                      [0,0,1,0,0,0,1,0],
-                      [0,0,0,0,0,0,0,0]]];// monde 3
+                      [[0,0,0,0,0,3,0,0],
+                       [0,0,0,0,0,0,0,0],
+                       [0,1,0,0,0,0,0,0],
+                       [0,0,0,0,0,0,0,0],
+                       [0,0,0,0,2,0,0,0],
+                       [0,0,0,0,0,0,0,0],
+                       [0,0,1,0,0,0,1,0],
+                       [0,0,0,0,0,0,0,0]]];// monde 3
 //------------------------------------------------------------------------------------------
 
-
-var indexWorld = 0;
 // Context
 var screenWidth = width;
 var screenHeight = height;
 
-var ajustementWorld = 60;
+var indexWorld = 0;
+var font = createFont("fantasy",40);
 
 // Front
 var xOrigine = 0;
@@ -72,13 +71,16 @@ var side = screenWidth / allWorldsBack[indexWorld].length;
 var hero = [0, 3];
 
 // inventory
-var keyDoor = false;
+var inventoryOpen = false;
+
+var keyDoor = 0;
+var blueGem = 0;
 
 // world Elements
 var obstacle = ["cute/Rock","cute/TreeShort","cute/TreeTall","cute/TreeUgly"];
 // image(getImage("cute/TreeTall")
 
-// DrawElement
+//----------------------------------------------- DrawElement -----------------------------
 var drawPath = function(i,j) {
     image(getImage("cute/GrassBlock"),xOrigine+i*(side) ,yOrigine+j*(side) +77 , side, -110);
 };
@@ -89,6 +91,11 @@ var drawKey = function(i,j) {
     image(getImage("cute/Key"),xOrigine+i*(side) + 5 ,yOrigine+j*(side) -5 ,39,49 );
 
 };
+
+var drawBlueGem = function(i,j) {
+    image(getImage("cute/GemBlue"),xOrigine+i*(side) + 5 ,yOrigine+j*(side) -5 ,39,49 );
+
+};
 var drawEnd = function(i,j) {
     image(getImage("cute/DoorTallClosed"),xOrigine+i*(side) ,yOrigine+j*(side) - 21, side, 74);};
 
@@ -96,7 +103,27 @@ var drawHero = function(i,j) {
     image(getImage("cute/CharacterBoy"), side * (hero[0]),side * (hero[1]) - 28,46,85);
 };
 
-// DrawWorld
+var drawInventory = function() {
+    var iW = 60;
+    var iH = 90;
+    var oX = 70;
+    var oY = 40;
+    
+    var dx = 80;
+    var dy = 35;
+    
+    textFont(font);
+    fill(0, 0, 0, 175);
+    rect(side, side, 300, 300, 30);
+    fill(255, 255, 255);
+    image(getImage("cute/GemBlue"),oX,oY,iW,iH);
+    text(":  " + blueGem, iW + dx, iH + dy);
+    image(getImage("cute/Key"),oX,oY + dx,iW,iH);
+    text(":  " + keyDoor, iW + dx, iH + dy*3);
+    
+};
+
+// ----------------------------------- DrawWorld ---------------------------------------
 var drawWorld = function() {
 for (var j=0;j<allWorldsFront[indexWorld].length;j++){
     for (var i=0;i<allWorldsFront[indexWorld][j].length;i++){
@@ -104,32 +131,45 @@ for (var j=0;j<allWorldsFront[indexWorld].length;j++){
         if (allWorldsFront[indexWorld][i][j] === 1) {
         drawObstacle(i,j);
         }
-        if ((allWorldsFront[indexWorld][i][j] === 2) && (keyDoor === false)) {
+        if (allWorldsFront[indexWorld][i][j] === 2) {
         drawKey(i,j);
         }
         if (allWorldsFront[indexWorld][i][j] === 3) {
         drawEnd(i,j);
         }
+        if (allWorldsFront[indexWorld][i][j] === 4) {
+        drawBlueGem(i,j);
+        }
+        
     }
 
 }
 
 };
 
+// ---------------------------------- drawOverlay ----------------------------------------
+
+var drawOverlay = function() {
+    if (inventoryOpen === true) {
+       drawInventory(); 
+    }
+};
+
 // ------------------- function check-ground ----------------------------------------------
 
 var checkGround = function () {
     if (allWorldsFront[indexWorld][hero[0]][hero[1]] === 2){
-        keyDoor = true;
+        keyDoor++;
+        allWorldsFront[indexWorld][hero[0]][hero[1]] = 0;
     }
-    if (allWorldsFront[indexWorld][hero[0]][hero[1]] === 3 && keyDoor === true){
+    if (allWorldsFront[indexWorld][hero[0]][hero[1]] === 3 && keyDoor > 0){
         indexWorld++;
         hero = [0, 3];
-        keyDoor = false;
+        keyDoor--;
     }
 };
 
-//------------------------------heros movement----------------------------
+//--------------------------------------- keyPressed --------------------------------------
 keyPressed = function() {
     if (key.toString() === 'z') {
         if ((allWorldsBack[indexWorld][hero[0]][hero[1]-1] !== 1) && (hero[1] !== 0)) {
@@ -154,6 +194,13 @@ keyPressed = function() {
         hero[0] = hero[0]+1;
         }
     }
+    if (key.toString() === 'e') {
+        if (inventoryOpen) {
+            inventoryOpen = false;
+        } else {
+            inventoryOpen = true;
+        }
+    }
 };
 //-------------------------------- Gestion des touches -------------------------------------
 
@@ -164,6 +211,7 @@ var draw = function() {
     drawWorld();
     drawHero();
     checkGround();
+    drawOverlay();
     text(hero, 10, 10);
     // text(worldBack[hero[0]][hero[1]-1], 20 ,20);
 
