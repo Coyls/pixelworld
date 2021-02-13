@@ -70,7 +70,7 @@ var allWorldsBack = [[[[0,0,0,0,0,0,0,0],// World : 0 0
                       [[0,0,0,0,0,0,0,0],// World : 2 1
                        [0,0,0,0,0,0,0,0],
                        [0,0,0,0,0,0,0,0],
-                       [0,0,0,0,0,0,0,0],
+                       [0,0,0,0,1,0,0,0],
                        [0,0,0,0,0,0,0,0],
                        [0,0,0,0,0,0,0,0],
                        [0,0,0,0,0,0,0,0],
@@ -155,7 +155,7 @@ var allWorldsFront = [[[[0,0,0,0,5,0,0,0],// World : 0 0
                        [[0,0,0,0,0,0,0,0],// World : 2 1
                         [0,0,0,0,0,0,0,0],
                         [0,0,0,0,0,0,0,0],
-                        [0,0,0,0,0,0,0,0],
+                        [0,0,0,0,7,0,0,0],
                         [5,0,0,0,0,0,0,5],
                         [0,0,0,0,0,0,0,0],
                         [0,0,0,0,0,0,0,0],
@@ -194,13 +194,9 @@ var hero = [4, 4];
 // inventory
 var inventoryOpen = false;
 
-var keyDoor = 0;
+var keyChest = 0;
 var blueGem = 0;
 var greenGem = 0;
-
-// world Elements
-var obstacle = ["cute/Rock","cute/TreeShort","cute/TreeTall","cute/TreeUgly"];
-// image(getImage("cute/TreeTall")
 
 //----------------------------------------------- DrawElement -----------------------------
 var drawPath = function(i,j) {
@@ -231,6 +227,12 @@ var drawSun = function(i,j) {
 var drawPnj = function(i,j) {
     image(getImage("cute/CharacterCatGirl"),xOrigine+i*(side) ,yOrigine+j*(side) - 28,46,85);
 };
+var drawChestClose = function(i,j) {
+    image(getImage("cute/ChestClosed"),xOrigine+i*(side) + 5 ,yOrigine+j*(side) -5 ,39,49 );
+};
+var drawChestOpen = function(i,j) {
+    image(getImage("cute/ChestOpen"),xOrigine+i*(side) + 5 ,yOrigine+j*(side) -5 ,39,49 );
+};
 // --------------------------------------- overlay ---------------------------
 var drawInventory = function() {
     var iW = 60;
@@ -250,7 +252,7 @@ var drawInventory = function() {
     image(getImage("cute/GemBlue"),oX,oY,iW,iH);
     text(":  " + blueGem, iW + dx, iH + dy);
     image(getImage("cute/Key"),oX,oY + dx,iW,iH);
-    text(":  " + keyDoor, iW + dx, iH + dy*3);
+    text(":  " + keyChest, iW + dx, iH + dy*3);
     image(getImage("cute/GemGreen"),oX,oY + dx * 2,iW,iH);
     text(":  " + greenGem, iW + dx, iH + dy*5);
 };
@@ -277,14 +279,13 @@ var drawPnjText = function() {
     text("= 3 x", oX + dx,oY + dy *2);
     image(getImage("cute/GemBlue"),oX + dx *2 ,oY,iW,iH);
     textFont(fontTextStartMenu);
-    text("press     a     to buy", 126,205);
+    text("press     b     to buy", 126,205);
 };
 
 
 var drawStartMenu = function() {
     fill(0, 0, 0);
     rect(0, 0, width, height);
-    
     fill(255, 255, 255);
     textFont(fontTitleStartMenu);
     text("Pixelworld", 70,150);
@@ -292,9 +293,29 @@ var drawStartMenu = function() {
     text("Press espace to start", 123,214);
     textFont(fontTextStartMenu);
     text("z,q,s,d = to move", 140,287);
-    text("e = inventory", 150,318);
-    
+    text("i = inventory", 150,318);
+    text("e = interaction", 141,346);
 };
+
+var drawChestText = function() {
+    var oX = 80;
+    var oY = 66;
+    var iW = -36;
+    var iH = 88;
+    
+    var dx = -65;
+    var dy = 67;
+    
+    fill(0, 0, 0, 175);
+    stroke(255, 255, 255);
+    strokeWeight(5);
+    rect(iW + oX, iH + oY, 300, 43, 30);
+    fill(255, 255, 255);
+    textFont(fontTextStartMenu);
+    text("I need a key to open this chest !",side + oX + dx, side + oY + dy);
+};
+
+
 
 // ----------------------------------- DrawWorld ---------------------------------------
 var drawWorld = function() {
@@ -326,6 +347,14 @@ for (var j=0;j<allWorldsFront[iWX][iWY].length;j++){
         if (allWorldsFront[iWX][iWY][i][j] === 6) {
         drawPnj(i,j);
         }
+        // chestClose 
+        if (allWorldsFront[iWX][iWY][i][j] === 7) {
+        drawChestClose(i,j);
+        }
+        // chestOpen 
+        if (allWorldsFront[iWX][iWY][i][j] === 8) {
+        drawChestOpen(i,j);
+        }
     }
 
 }
@@ -335,20 +364,27 @@ for (var j=0;j<allWorldsFront[iWX][iWY].length;j++){
 // ---------------------------------- drawOverlay ----------------------------------------
 
 var drawOverlay = function() {
+    // inventory
     if (inventoryOpen === true) {
        drawInventory(); 
     }
+    // startMenu
     if (gameStart === true) {
         drawStartMenu();
     }
+    // pnjText
     if (allWorldsFront[iWX][iWY][hero[0]][hero[1]-1] === 6) {
         drawPnjText();    
+    }
+    // chestText 
+    if (allWorldsFront[iWX][iWY][hero[0]][hero[1]-1] === 7) {
+        drawChestText();    
     }
 };
 
 // ------------------- function onGround ----------------------------------------------
 var onGroundKey = function () {
-    keyDoor++;
+    keyChest++;
     allWorldsFront[iWX][iWY][hero[0]][hero[1]] = 0;
 };
 
@@ -413,7 +449,7 @@ keyPressed = function() {
         hero[0] = hero[0]+1;
         }
     }
-    if (key.toString() === 'e') {
+    if (key.toString() === 'i') {
         if (inventoryOpen) {
             inventoryOpen = false;
         } else {
@@ -423,13 +459,21 @@ keyPressed = function() {
     if (key.toString() === ' ') {
         gameStart = false;
     }
-    if (key.toString() === 'a') {
+    if (key.toString() === 'b') {
         if (allWorldsFront[iWX][iWY][hero[0]][hero[1]-1] === 6 && blueGem > 2) {
             blueGem = blueGem - 3;
             greenGem++;
         }
         
     }
+    // interaction
+    if (key.toString() === 'e') {
+        if (allWorldsFront[iWX][iWY][hero[0]][hero[1]-1] === 7 && keyChest > 0) {
+            allWorldsFront[iWX][iWY][hero[0]][hero[1]-1] = 8;
+            blueGem = blueGem + 5;
+        }
+    }
+    
     
 };
 //-------------------------------- Gestion des touches -------------------------------------
@@ -445,15 +489,17 @@ var draw = function() {
     changeWorld();
     
     
-    text(hero, 10, 25);
-    text(iWX, 56, 25);
-    text(iWY, 76, 25);
-    // text(allWorlds  !:Back  [iWX][iWY][hero[0]][hero[1]-1], 112 ,89);
+    //text(hero, 10, 25);
+    //text(iWX, 56, 25);
+    //text(iWY, 76, 25);
+    //text(allWorldsFront[iWX][iWY][hero[0]][hero[1]-1], 112 ,89);
 
 };
 
 //-------------------------------------------- code utile a conserver
 // var randomObstacle = floor(random(0, obstacle.length));
-
+// world Elements
+// var obstacle = ["cute/Rock","cute/TreeShort","cute/TreeTall","cute/TreeUgly"];
+// image(getImage("cute/TreeTall")
 
 
