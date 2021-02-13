@@ -77,7 +77,7 @@ var allWorldsBack = [[[[0,0,0,0,0,0,0,0],// World : 0 0
                        [0,0,0,0,0,0,0,0]],
                       
                       [[0,0,0,0,0,0,0,0],// World : 2 2
-                       [0,0,0,0,0,0,0,0],
+                       [0,1,0,0,0,0,0,0],
                        [0,0,0,0,0,0,0,0],
                        [0,0,0,0,0,0,0,0],
                        [0,0,0,0,0,0,0,0],
@@ -136,7 +136,7 @@ var allWorldsFront = [[[[0,0,0,0,5,0,0,0],// World : 0 0
                         [0,0,0,0,0,0,0,0],
                         [0,0,0,0,0,0,0,0],
                         [0,0,0,0,0,0,0,0],
-                        [0,0,0,0,0,0,0,5],
+                        [0,0,0,0,4,0,0,5],
                         [0,0,0,0,0,0,0,0],
                         [0,0,0,0,0,0,0,0],
                         [0,0,0,0,5,0,0,0]]
@@ -148,7 +148,7 @@ var allWorldsFront = [[[[0,0,0,0,5,0,0,0],// World : 0 0
                         [0,0,0,0,0,0,0,0],
                         [0,0,0,0,0,0,0,0],
                         [5,0,0,0,0,0,0,0],
-                        [0,0,0,0,0,0,0,0],
+                        [0,0,0,0,4,0,0,0],
                         [0,0,0,0,0,0,0,0],
                         [0,0,0,0,5,0,0,0]],
                       
@@ -162,7 +162,7 @@ var allWorldsFront = [[[[0,0,0,0,5,0,0,0],// World : 0 0
                         [0,0,0,0,5,0,0,0]],
                       
                        [[0,0,0,0,0,0,0,0],// World : 2 2
-                        [0,0,0,0,0,0,0,0],
+                        [0,6,0,0,0,0,0,0],
                         [0,0,0,0,0,0,0,0],
                         [0,0,0,0,0,0,0,0],
                         [0,0,0,0,0,0,0,5],
@@ -196,6 +196,7 @@ var inventoryOpen = false;
 
 var keyDoor = 0;
 var blueGem = 0;
+var greenGem = 0;
 
 // world Elements
 var obstacle = ["cute/Rock","cute/TreeShort","cute/TreeTall","cute/TreeUgly"];
@@ -227,6 +228,10 @@ var drawSun = function(i,j) {
     image(getImage("cute/DirtBlock"),xOrigine+i*(side) ,yOrigine+j*(side) -30, side ,102);
 };
 
+var drawPnj = function(i,j) {
+    image(getImage("cute/CharacterCatGirl"),xOrigine+i*(side) ,yOrigine+j*(side) - 28,46,85);
+};
+// --------------------------------------- overlay ---------------------------
 var drawInventory = function() {
     var iW = 60;
     var iH = 90;
@@ -246,8 +251,35 @@ var drawInventory = function() {
     text(":  " + blueGem, iW + dx, iH + dy);
     image(getImage("cute/Key"),oX,oY + dx,iW,iH);
     text(":  " + keyDoor, iW + dx, iH + dy*3);
-    
+    image(getImage("cute/GemGreen"),oX,oY + dx * 2,iW,iH);
+    text(":  " + greenGem, iW + dx, iH + dy*5);
 };
+
+var drawPnjText = function() {
+    var iW = 60;
+    var iH = 90;
+    var oX = 80;
+    var oY = 81;
+    
+    var dx = 88;
+    var dy = 35;
+    
+     
+    fill(0, 0, 0, 175);
+    stroke(255, 255, 255);
+    strokeWeight(5);
+    rect(side, side, 300, 198, 30);
+    fill(255, 255, 255);
+    textFont(fontTextStartMenu);
+    text("Mysterious seller...", 67,86);
+    image(getImage("cute/GemGreen"),oX,oY,iW,iH);
+    textFont(fontInventory);
+    text("= 3 x", oX + dx,oY + dy *2);
+    image(getImage("cute/GemBlue"),oX + dx *2 ,oY,iW,iH);
+    textFont(fontTextStartMenu);
+    text("press     a     to buy", 126,205);
+};
+
 
 var drawStartMenu = function() {
     fill(0, 0, 0);
@@ -268,21 +300,31 @@ var drawStartMenu = function() {
 var drawWorld = function() {
 for (var j=0;j<allWorldsFront[iWX][iWY].length;j++){
     for (var i=0;i<allWorldsFront[iWX][iWY][j].length;i++){
+        // path
         drawPath(i,j);
+        // Obstacle
         if (allWorldsFront[iWX][iWY][i][j] === 1) {
         drawObstacle(i,j);
         }
+        // key
         if (allWorldsFront[iWX][iWY][i][j] === 2) {
         drawKey(i,j);
         }
+        // door
         if (allWorldsFront[iWX][iWY][i][j] === 3) {
         drawEnd(i,j);
         }
+        // blueGem
         if (allWorldsFront[iWX][iWY][i][j] === 4) {
         drawBlueGem(i,j);
         }
+        // sun
         if (allWorldsFront[iWX][iWY][i][j] === 5) {
         drawSun(i,j);
+        }
+        // pnj
+        if (allWorldsFront[iWX][iWY][i][j] === 6) {
+        drawPnj(i,j);
         }
     }
 
@@ -298,6 +340,9 @@ var drawOverlay = function() {
     }
     if (gameStart === true) {
         drawStartMenu();
+    }
+    if (allWorldsFront[iWX][iWY][hero[0]][hero[1]-1] === 6) {
+        drawPnjText();    
     }
 };
 
@@ -378,6 +423,14 @@ keyPressed = function() {
     if (key.toString() === ' ') {
         gameStart = false;
     }
+    if (key.toString() === 'a') {
+        if (allWorldsFront[iWX][iWY][hero[0]][hero[1]-1] === 6 && blueGem > 2) {
+            blueGem = blueGem - 3;
+            greenGem++;
+        }
+        
+    }
+    
 };
 //-------------------------------- Gestion des touches -------------------------------------
 
@@ -395,7 +448,7 @@ var draw = function() {
     text(hero, 10, 25);
     text(iWX, 56, 25);
     text(iWY, 76, 25);
-    // text(worldBack[hero[0]][hero[1]-1], 20 ,20);
+    // text(allWorlds  !:Back  [iWX][iWY][hero[0]][hero[1]-1], 112 ,89);
 
 };
 
