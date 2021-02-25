@@ -85,90 +85,90 @@ var allWorldsBack = [[[[0,0,0,0,0,0,0,0],// World : 0 0
                        [0,0,0,0,0,0,0,0],
                        [0,0,0,0,0,0,0,0]]]];
                       
-var allWorldsFront = [[[[0,0,0,0,5,0,0,0],// World : 0 0
-                        [0,0,0,0,0,0,0,0],
-                        [0,0,0,0,0,0,0,0],
-                        [0,0,0,0,0,0,0,0],
-                        [5,0,0,0,0,0,0,0],
-                        [0,0,0,0,0,0,0,0],
-                        [0,0,0,0,0,0,0,0],
-                        [0,0,0,0,0,0,0,0]],
+var allWorldsFront = [[[[1,25,22,28,29,5,21,23],// World : 0 0
+                        [1,26,24,27,29,5,21,23],
+                        [10,0,0,0,0,5,26,27],
+                        [10,6,0,5,5,5,0,0],
+                        [5,5,5,5,7,5,0,0],
+                        [5,5,5,5,5,5,25,28],
+                        [25,22,28,29,0,0,21,23],
+                        [26,24,27,29,6,0,26,27]],
                       
-                       [[0,0,0,0,5,0,0,0],// World : 0 1
-                        [0,0,0,0,0,0,0,0],
-                        [0,0,0,0,0,0,0,0],
-                        [0,0,0,0,0,0,0,0],
-                        [5,0,0,0,0,0,0,5],
-                        [0,0,0,0,0,0,0,0],
-                        [0,0,0,0,0,0,0,0],
-                        [0,0,0,0,0,0,0,0]],
+                       [[9,9,11,11,5,11,9,10],// World : 0 1
+                        [2,9,9,11,5,11,15,10],
+                        [0,0,9,11,5,11,0,0],
+                        [5,0,9,0,5,0,0,0],
+                        [9,9,9,0,5,5,5,5],
+                        [9,9,6,0,0,5,5,5],
+                        [5,0,0,0,0,25,22,28],
+                        [10,11,0,0,1,26,24,27]],
                       
-                       [[0,0,0,0,5,0,0,0],// World : 0 2
-                        [0,0,0,0,0,0,0,0],
-                        [0,0,0,0,0,0,0,0],
-                        [0,0,0,0,0,0,0,0],
-                        [0,0,0,0,0,0,0,5],
-                        [0,0,0,0,0,0,0,0],
-                        [0,0,0,0,0,0,0,0],
-                        [0,0,0,0,0,0,0,0]]
+                       [[11,0,0,0,5,11,11,11],// World : 0 2
+                        [0,0,0,0,5,0,10,10],
+                        [0,1,1,5,5,5,0,10],
+                        [0,1,14,5,5,5,5,5],
+                        [0,5,5,5,5,9,9,9],
+                        [0,5,5,5,9,9,9,9],
+                        [9,9,9,9,9,9,0,5],
+                        [9,9,9,9,9,2,0,0]]
                        
                         ],[
                            
-                       [[0,0,0,0,5,0,0,0],// World : 1 0
-                        [0,0,0,0,0,0,0,0],
-                        [0,0,0,0,0,0,0,0],
-                        [0,0,0,0,0,0,0,0],
-                        [5,0,0,0,0,0,0,0],
-                        [0,0,0,0,0,0,0,0],
-                        [0,0,0,0,0,0,0,0],
-                        [0,0,0,0,5,0,0,0]],
+                       [[1,1,10,5,0,0,10,9],// World : 1 0
+                        [1,1,10,5,5,5,10,9],
+                        [1,10,10,10,10,5,10,9],
+                        [1,0,0,0,10,5,0,0],
+                        [5,5,5,5,5,5,0,10],
+                        [1,25,28,29,10,5,10,10],
+                        [1,21,23,29,6,5,25,28],
+                        [1,21,23,29,0,5,21,23]],
                       
-                       [[0,0,0,0,5,0,0,0],// World : 1 1
-                        [0,0,0,0,0,0,0,0],
-                        [0,0,1,1,0,0,0,0],
-                        [0,0,0,0,0,0,0,0],
+                       [[9,9,9,9,5,9,9,1],// World : 1 1
+                        [9,9,9,9,0,9,9,1],
+                        [5,0,1,1,0,0,9,1],
+                        [5,0,0,0,0,0,9,1],
                         [5,0,0,0,0,0,0,5],
-                        [0,0,4,0,0,0,0,0],
-                        [0,0,0,0,0,0,2,0],
-                        [0,0,0,0,5,0,0,0]],
+                        [9,9,4,0,0,2,9,10],
+                        [9,9,9,9,0,9,9,10],
+                        [9,9,11,11,5,11,9,10]],
                       
-                       [[0,0,0,0,5,0,0,0],// World : 1 2
-                        [0,0,0,0,0,0,0,0],
-                        [0,0,0,0,0,0,0,0],
-                        [0,0,0,0,0,0,0,0],
-                        [0,0,0,0,4,0,0,5],
-                        [0,0,0,0,0,0,0,0],
-                        [0,0,0,0,0,0,0,0],
-                        [0,0,0,0,5,0,0,0]]
+                       [[11,5,5,11,11,11,11,11],// World : 1 2
+                        [11,0,0,0,11,11,11,11],
+                        [11,11,11,0,0,11,0,5],
+                        [11,11,11,11,0,0,0,5],
+                        [11,12,0,11,0,0,0,5],
+                        [11,11,0,11,0,0,0,11],
+                        [11,11,0,0,0,0,11,11],
+                        [11,0,0,0,5,11,11,11]]
                        
                         ],[
                            
-                       [[0,0,0,0,0,0,0,0],// World : 2 0
-                        [0,0,0,0,0,0,0,0],
-                        [0,0,0,0,0,0,0,0],
-                        [0,0,0,0,0,0,0,0],
-                        [5,0,0,0,0,0,0,0],
-                        [0,0,0,0,4,0,0,0],
-                        [0,0,0,0,0,0,0,0],
-                        [0,0,0,0,5,0,0,0]],
+                       [[9,9,9,9,9,9,9,9],// World : 2 0
+                        [9,9,9,9,9,9,9,9],
+                        [1,1,10,0,0,9,9,9],
+                        [1,1,10,0,4,0,9,9],
+                        [5,5,5,0,0,0,9,9],
+                        [1,1,5,5,0,10,9,9],
+                        [1,1,0,5,10,10,9,9],
+                        [1,1,10,5,0,10,10,9]],
                       
-                       [[0,0,0,0,0,0,0,0],// World : 2 1
-                        [0,0,0,0,0,0,0,0],
-                        [0,0,0,0,0,0,0,0],
-                        [0,0,0,0,7,0,0,0],
-                        [5,0,0,0,0,0,0,5],
-                        [0,0,0,0,0,0,0,0],
-                        [0,0,0,0,0,0,0,0],
-                        [0,0,0,0,5,0,0,0]],
+                       [[9,9,9,9,9,9,9,9],// World : 2 1
+                        [9,9,9,9,9,13,0,9],
+                        [11,9,9,9,0,0,0,9],
+                        [0,0,11,0,0,0,0,9],
+                        [0,0,0,10,5,5,5,5],
+                        [5,5,5,5,5,0,0,1],
+                        [5,5,0,0,5,0,9,1],
+                        [9,9,9,0,5,9,9,1]],
                       
-                       [[0,0,0,0,0,0,0,0],// World : 2 2
-                        [0,6,0,0,0,0,0,0],
-                        [0,0,0,0,0,0,0,0],
-                        [0,0,0,0,0,0,0,0],
-                        [0,0,0,0,0,0,0,5],
-                        [0,0,0,0,0,0,0,0],
-                        [0,0,0,0,0,0,0,0],
-                        [0,0,0,0,5,0,0,0]]]];
+                       [[9,9,9,9,9,9,9,9],// World : 2 2
+                        [11,0,9,9,9,9,9,9],
+                        [11,0,0,0,0,0,0,0],
+                        [0,0,0,0,11,0,0,0],
+                        [0,11,11,11,11,0,10,11],
+                        [0,0,11,11,0,0,0,5],
+                        [0,0,0,11,10,0,0,5],
+                        [11,5,5,11,11,10,0,0]]]];
 //------------------------------------------------------------------------------------------
 
 // Context
@@ -188,6 +188,8 @@ var xOrigine = 0;
 var yOrigine = 0;
 var side = screenWidth / allWorldsBack[iWX][iWY].length;
 
+var roofShift = 61;
+
 // Hero
 var hero = [4, 4];
 
@@ -202,6 +204,17 @@ var greenGem = 0;
 var drawPath = function(i,j) {
     image(getImage("cute/GrassBlock"),xOrigine+i*(side) ,yOrigine+j*(side) +77 , side, -110);
 };
+var drawWater = function(i,j) {
+    image(getImage("cute/WaterBlock"),xOrigine+i*(side) ,yOrigine+j*(side) +77 , side, -110);
+};
+var drawBuisson = function(i,j) {
+    image(getImage("cute/TreeShort"),xOrigine+i*(side) ,yOrigine+j*(side) -28, side ,78);
+};
+
+var drawTree = function(i,j) {
+    image(getImage("cute/TreeTall"),xOrigine+i*(side) ,yOrigine+j*(side) -28, side ,78);
+};
+
 var drawObstacle = function(i,j) {
     image(getImage("cute/Rock"),xOrigine+i*(side) ,yOrigine+j*(side) -28, side ,78);
 };
@@ -220,6 +233,23 @@ var drawHero = function(i,j) {
     image(getImage("cute/CharacterBoy"), side * (hero[0]),side * (hero[1]) - 28,46,85);
 };
 
+var drawMonsterRed = function(i,j) {
+    image(getImage("avatars/piceratops-ultimate"),xOrigine+i*(side) ,yOrigine+j*(side) - 34,62,85);
+};
+
+var drawMonsterGreen = function(i,j) {
+    image(getImage("avatars/leafers-ultimate"),xOrigine+i*(side) ,yOrigine+j*(side) - 34,62,85);
+};
+
+var drawMonsterYellow = function(i,j) {
+    image(getImage("avatars/primosaur-ultimate"),xOrigine+i*(side) ,yOrigine+j*(side) - 34,62,85);
+};
+
+
+var drawMonsterBlue = function(i,j) {
+    image(getImage("avatars/aqualine-ultimate"),xOrigine+i*(side) ,yOrigine+j*(side) - 34,62,85);
+};
+
 var drawSun = function(i,j) {
     image(getImage("cute/DirtBlock"),xOrigine+i*(side) ,yOrigine+j*(side) -30, side ,102);
 };
@@ -233,6 +263,38 @@ var drawChestClose = function(i,j) {
 var drawChestOpen = function(i,j) {
     image(getImage("cute/ChestOpen"),xOrigine+i*(side) + 5 ,yOrigine+j*(side) -5 ,39,49 );
 };
+
+// house 
+
+var drawRoofLeft = function(i,j) {
+    image(getImage("cute/RoofEast"),xOrigine+i*(side) ,yOrigine+j*(side) +roofShift , side, -110);
+};
+var drawRoofRight = function(i,j) {
+    image(getImage("cute/RoofWest"),xOrigine+i*(side) ,yOrigine+j*(side) +roofShift , side, -110);
+};
+var drawRoofTop = function(i,j) {
+    image(getImage("cute/RoofNorth"),xOrigine+i*(side) ,yOrigine+j*(side) +roofShift , side, -110);
+};
+var drawRoofBot = function(i,j) {
+    image(getImage("cute/RoofSouth"),xOrigine+i*(side) ,yOrigine+j*(side) +roofShift , side, -110);
+};
+var drawRoofCornerLT = function(i,j) {
+    image(getImage("cute/RoofNorthWest"),xOrigine+i*(side) ,yOrigine+j*(side) +roofShift , side, -110);
+};
+var drawRoofCornerRT = function(i,j) {
+    image(getImage("cute/RoofNorthEast"),xOrigine+i*(side) ,yOrigine+j*(side) +roofShift , side, -110);
+};
+var drawRoofCornerRB = function(i,j) {
+    image(getImage("cute/RoofSouthEast"),xOrigine+i*(side) ,yOrigine+j*(side) +roofShift , side, -110);
+};
+var drawRoofCornerLB = function(i,j) {
+    image(getImage("cute/RoofSouthWest"),xOrigine+i*(side) ,yOrigine+j*(side) +roofShift , side, -110);
+};
+var drawWall = function(i,j) {
+    image(getImage("cute/WallBlockTall"),xOrigine+i*(side) ,yOrigine+j*(side) +51 , side, -83);
+};
+
+
 // --------------------------------------- overlay ---------------------------
 var drawInventory = function() {
     var iW = 60;
@@ -355,6 +417,89 @@ for (var j=0;j<allWorldsFront[iWX][iWY].length;j++){
         if (allWorldsFront[iWX][iWY][i][j] === 8) {
         drawChestOpen(i,j);
         }
+        // water
+        if (allWorldsFront[iWX][iWY][i][j] === 9) {
+        drawWater(i,j);
+        }
+        // buisson
+        if (allWorldsFront[iWX][iWY][i][j] === 10) {
+        drawBuisson(i,j);
+        }
+        // tree
+        if (allWorldsFront[iWX][iWY][i][j] === 11) {
+        drawTree(i,j);
+        }
+        // monsterGreen
+        if (allWorldsFront[iWX][iWY][i][j] === 12) {
+        drawMonsterRed(i,j);
+        }
+        // monsterBlue
+        if (allWorldsFront[iWX][iWY][i][j] === 13) {
+        drawMonsterBlue(i,j);
+        }// drawMonsterYellow
+        if (allWorldsFront[iWX][iWY][i][j] === 14) {
+        drawMonsterYellow(i,j);
+        }
+        if (allWorldsFront[iWX][iWY][i][j] === 15) {
+        drawMonsterGreen(i,j);
+        }
+        // Draw Wall
+        if (allWorldsFront[iWX][iWY][i][j] === 29) {
+        drawWall(i,j);
+        }
+        
+    }
+
+}
+
+};
+
+var drawHouse = function() {
+for (var j=0;j<allWorldsFront[iWX][iWY].length;j++){
+    for (var i=0;i<allWorldsFront[iWX][iWY][j].length;i++){
+        
+        
+
+        // Top
+        if (allWorldsFront[iWX][iWY][i][j] === 21) {
+        drawRoofTop(i,j);
+        }
+        // Right
+        if (allWorldsFront[iWX][iWY][i][j] === 22) {
+        drawRoofRight(i,j);
+        }
+        // Bot
+        if (allWorldsFront[iWX][iWY][i][j] === 23) {
+        drawRoofBot(i,j);
+        }
+        // Left
+        if (allWorldsFront[iWX][iWY][i][j] === 24) {
+        drawRoofLeft(i,j);
+        }
+        //
+        //
+        //
+        
+        // Corner Top
+        if (allWorldsFront[iWX][iWY][i][j] === 25) {
+        drawRoofCornerLT(i,j);
+        }
+        // Corner Right
+        if (allWorldsFront[iWX][iWY][i][j] === 26) {
+        drawRoofCornerRT(i,j);
+        }
+        // Corner Bot
+        if (allWorldsFront[iWX][iWY][i][j] === 27) {
+        drawRoofCornerRB(i,j);
+        }
+        // Corner Left
+        if (allWorldsFront[iWX][iWY][i][j] === 28) {
+        drawRoofCornerLB(i,j);
+        }
+        
+        
+        
+        
     }
 
 }
@@ -408,19 +553,19 @@ var changeWorld = function () {
     if (allWorldsFront[iWX][iWY][hero[0]][hero[1]] === 5){
         if (hero[1] === 0){
             iWY++;
-            hero = [4,6];
+            hero = [hero[0],6];
         }
         if (hero[1] === 7){
             iWY--;
-            hero = [4,1];
+            hero = [hero[0],1];
         }
         if (hero[0] === 0){
             iWX++;
-            hero = [6,4];
+            hero = [6,hero[1]];
         }
         if (hero[0] === 7){
             iWX--;
-            hero = [1,4];
+            hero = [1,hero[1]];
         }
     }
 };
@@ -471,6 +616,7 @@ keyPressed = function() {
         if (allWorldsFront[iWX][iWY][hero[0]][hero[1]-1] === 7 && keyChest > 0) {
             allWorldsFront[iWX][iWY][hero[0]][hero[1]-1] = 8;
             blueGem = blueGem + 5;
+            keyChest--;
         }
     }
     
@@ -484,14 +630,15 @@ keyPressed = function() {
 var draw = function() {
     drawWorld();
     drawHero();
+    drawHouse();
     checkGround();
     drawOverlay();
     changeWorld();
     
     
-    //text(hero, 10, 25);
-    //text(iWX, 56, 25);
-    //text(iWY, 76, 25);
+    text(hero, 10, 25);
+    text(iWX, 56, 25);
+    text(iWY, 76, 25);
     //text(allWorldsFront[iWX][iWY][hero[0]][hero[1]-1], 112 ,89);
 
 };
