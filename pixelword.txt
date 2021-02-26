@@ -109,6 +109,13 @@ var roofShift = 61;
 
 // Hero
 var hero = [4, 4];
+var lastPositionHero = [];
+
+var savePositionHero = function() {
+    lastPositionHero = [hero[0],hero[1]];
+};
+            
+
 
 // inventory
 var inventoryOpen = false;
@@ -116,6 +123,10 @@ var inventoryOpen = false;
 var keyChest = 0;
 var blueGem = 0;
 var greenGem = 0;
+var heart = 3;
+var hasSword = false;
+
+var monsters = [12,13,14,15];
 
 //----------------------------------------------- DrawElement -----------------------------
 var drawPath = function(i,j) {
@@ -213,6 +224,17 @@ var drawWall = function(i,j) {
 
 
 // --------------------------------------- overlay ---------------------------
+var drawHeart = function() {
+    rect(0,0, 132, 50);
+    fill(0, 0, 0, 170);
+    noStroke();
+    for (var i = 0; i < heart; i++) {
+        image(getImage("cute/Heart"),14 + i * 36 ,1, 25, 40);
+    }
+
+
+};
+
 var drawInventory = function() {
     var iW = 60;
     var iH = 90;
@@ -346,17 +368,19 @@ for (var j=0;j<allWorldsFront[iWX][iWY].length;j++){
         if (allWorldsFront[iWX][iWY][i][j] === 11) {
         drawTree(i,j);
         }
-        // monsterGreen
+        // monsterRed
         if (allWorldsFront[iWX][iWY][i][j] === 12) {
         drawMonsterRed(i,j);
         }
         // monsterBlue
         if (allWorldsFront[iWX][iWY][i][j] === 13) {
         drawMonsterBlue(i,j);
-        }// drawMonsterYellow
+        }
+        // drawMonsterYellow
         if (allWorldsFront[iWX][iWY][i][j] === 14) {
         drawMonsterYellow(i,j);
         }
+        // drawMonsterGreen
         if (allWorldsFront[iWX][iWY][i][j] === 15) {
         drawMonsterGreen(i,j);
         }
@@ -426,6 +450,8 @@ for (var j=0;j<allWorldsFront[iWX][iWY].length;j++){
 // ---------------------------------- drawOverlay ----------------------------------------
 
 var drawOverlay = function() {
+    // heart
+    drawHeart();
     // inventory
     if (inventoryOpen === true) {
        drawInventory(); 
@@ -442,6 +468,25 @@ var drawOverlay = function() {
     if (allWorldsFront[iWX][iWY][hero[0]][hero[1]-1] === 7) {
         drawChestText();    
     }
+};
+// ----------------------------------------- fightMonster ----------------------------------
+var looseHeart = function() {
+    hero = lastPositionHero;
+    heart--;
+};
+
+var fightMonster = function() {
+    for (var i=0; i < monsters.length; i++ ){
+        if (allWorldsFront[iWX][iWY][hero[0]][hero[1]-1] === monsters[i] || allWorldsFront[iWX][iWY][hero[0]][hero[1]+1] === monsters[i] || allWorldsFront[iWX][iWY][hero[0]+1][hero[1]] === monsters[i] || allWorldsFront[iWX][iWY][hero[0]-1][hero[1]] === monsters[i]) {
+            looseHeart();
+        }
+        
+            // cree un if si jai une arme  et reparer le bug en x
+            
+        
+    }
+    
+
 };
 
 // ------------------- function onGround ----------------------------------------------
@@ -490,25 +535,29 @@ var changeWorld = function () {
 keyPressed = function() {
     if (key.toString() === 'z') {
         if ((allWorldsBack[iWX][iWY][hero[0]][hero[1]-1] !== 1) && (hero[1] !== 0)) {
+            savePositionHero();
             hero[1] = hero[1]-1;
         }
         
     }
     if (key.toString() === 'q') {
         if (allWorldsBack[iWX][iWY][hero[0]-1][hero[1]] !== 1) {
-        hero[0] = hero[0]-1;
+            savePositionHero();
+            hero[0] = hero[0]-1;
         }
         
     }
     if (key.toString() === 's') {
         if ((allWorldsBack[iWX][iWY][hero[0]][hero[1]+1] !== 1) && (hero[1] !== allWorldsBack[iWX][iWY].length -1)){
+            savePositionHero();
             hero[1] = hero[1]+1;
         }
         
     }
     if (key.toString() === 'd') {
         if (allWorldsBack[iWX][iWY][hero[0]+1][hero[1]] !== 1) {
-        hero[0] = hero[0]+1;
+            savePositionHero();
+            hero[0] = hero[0]+1;
         }
     }
     if (key.toString() === 'i') {
@@ -551,11 +600,13 @@ var draw = function() {
     checkGround();
     drawOverlay();
     changeWorld();
+    fightMonster();
     
     
-    text(hero, 10, 25);
-    text(iWX, 56, 25);
-    text(iWY, 76, 25);
+    text(hero, 304, 25);
+    text(iWX, 366, 25);
+    text(iWY, 383,25);
+    
     //text(allWorldsFront[iWX][iWY][hero[0]][hero[1]-1], 112 ,89);
 
 };
