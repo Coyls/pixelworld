@@ -124,7 +124,8 @@ var keyChest = 0;
 var blueGem = 0;
 var greenGem = 0;
 var heart = 3;
-var hasSword = false;
+var hasSword = true;
+
 
 var monsters = [12,13,14,15];
 
@@ -221,6 +222,67 @@ var drawRoofCornerLB = function(i,j) {
 var drawWall = function(i,j) {
     image(getImage("cute/WallBlockTall"),xOrigine+i*(side) ,yOrigine+j*(side) +51 , side, -83);
 };
+// ----------------------------------- drawSword ---------------------------------
+var drawSword = function() {
+    var sideItem = 35;  
+    var aX = 30;
+    var aY = 7;
+    
+    var oX = hero[0] * side + aX; // Origine x
+    var oY = hero[1] * side + aY; // Origine Y
+
+    var template = [
+        
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,1,3,3,1],
+        [0,0,0,0,0,0,0,0,0,0,0,0,1,3,4,5,1],
+        [0,0,0,0,0,0,0,0,0,0,0,1,3,4,5,1,0],
+        [0,0,0,0,0,0,0,0,0,0,1,3,4,5,1,0,0],
+        [0,0,0,0,0,0,0,0,0,1,3,4,5,1,0,0,0],
+        [0,0,0,0,0,0,0,0,1,3,4,5,1,0,0,0,0],
+        [0,0,1,1,0,0,0,1,3,4,5,1,0,0,0,0,0],
+        [0,0,1,3,1,0,1,3,4,5,1,0,0,0,0,0,0],
+        [0,0,0,1,3,1,3,4,5,1,0,0,0,0,0,0,0],
+        [0,0,0,1,3,1,4,5,1,0,0,0,0,0,0,0,0],
+        [0,0,0,1,1,3,1,1,0,0,0,0,0,0,0,0,0],
+        [0,0,0,1,2,1,3,3,1,0,0,0,0,0,0,0,0],
+        [0,0,1,2,1,1,1,1,3,1,0,0,0,0,0,0,0],
+        [1,1,1,1,0,0,0,0,1,1,0,0,0,0,0,0,0],
+        [1,3,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    
+    ];
+    
+    // permet de cree le "responsive"
+    var pSide = sideItem / template.length;
+    
+    // generer une grille vide par defaut
+    for (var i = 0; i < template.length ; i++) {
+        for (var j = 0; j < template[i].length ; j++) {
+            noFill();
+            if (template[i][j] === 1){
+                fill(0, 0, 0);
+            }
+            if (template[i][j] === 2){
+                fill(100, 56, 0);
+            }
+            if (template[i][j] === 3){
+                fill(161, 173, 171);
+            }
+            if (template[i][j] === 4){
+                fill(66, 68, 76);
+            }
+            if (template[i][j] === 5){
+                fill(255, 255, 255);
+            }
+            // enleve les bordure
+            noStroke();
+            // genere le pixel
+            rect(oX + j * pSide, oY + i * pSide, pSide, pSide);
+
+        }
+    }
+};
 
 
 // --------------------------------------- overlay ---------------------------
@@ -231,8 +293,6 @@ var drawHeart = function() {
     for (var i = 0; i < heart; i++) {
         image(getImage("cute/Heart"),14 + i * 36 ,1, 25, 40);
     }
-
-
 };
 
 var drawInventory = function() {
@@ -450,6 +510,10 @@ for (var j=0;j<allWorldsFront[iWX][iWY].length;j++){
 // ---------------------------------- drawOverlay ----------------------------------------
 
 var drawOverlay = function() {
+    // sword
+    if (hasSword === true) {
+        drawSword();
+    }
     // heart
     drawHeart();
     // inventory
@@ -468,6 +532,7 @@ var drawOverlay = function() {
     if (allWorldsFront[iWX][iWY][hero[0]][hero[1]-1] === 7) {
         drawChestText();    
     }
+    
 };
 // ----------------------------------------- fightMonster ----------------------------------
 var looseHeart = function() {
