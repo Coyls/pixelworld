@@ -16,7 +16,7 @@ var allWorldsFront = [[[[1,25,22,28,29,5,21,23],// World : 0 0
                         [0,0,9,11,5,11,0,0],
                         [5,0,9,0,5,0,0,0],
                         [9,9,9,0,5,5,5,5],
-                        [9,9,6,0,0,5,5,5],
+                        [9,9,16,0,0,5,5,5],
                         [5,0,0,0,0,25,22,28],
                         [10,11,0,0,1,26,24,27]],
                       
@@ -100,6 +100,8 @@ var fontInventory = createFont("fantasy",40);
 var fontTitleStartMenu = createFont("fantasy",60);
 var fontTextStartMenu = createFont("fantasy",20);
 
+var buySword = false;
+
 // Front
 var xOrigine = 0;
 var yOrigine = 0;
@@ -114,7 +116,7 @@ var lastPositionHero = [];
 var savePositionHero = function() {
     lastPositionHero = [hero[0],hero[1]];
 };
-            
+
 
 
 // inventory
@@ -124,10 +126,19 @@ var keyChest = 0;
 var blueGem = 0;
 var greenGem = 0;
 var heart = 3;
-var hasSword = true;
+var hasSword = false;
 
-
+// Monstres
 var monsters = [12,13,14,15];
+
+// Death
+var isDead = false;
+
+var checkDeath = function() {
+    if (heart === 0) {
+        isDead = true;
+    }
+};
 
 //----------------------------------------------- DrawElement -----------------------------
 var drawPath = function(i,j) {
@@ -186,6 +197,11 @@ var drawSun = function(i,j) {
 var drawPnj = function(i,j) {
     image(getImage("cute/CharacterCatGirl"),xOrigine+i*(side) ,yOrigine+j*(side) - 28,46,85);
 };
+
+var drawPnjSwordSeller = function(i,j) {
+    image(getImage("cute/CharacterHornGirl"),xOrigine+i*(side) ,yOrigine+j*(side) - 28,46,85);
+};
+
 var drawChestClose = function(i,j) {
     image(getImage("cute/ChestClosed"),xOrigine+i*(side) + 5 ,yOrigine+j*(side) -5 ,39,49 );
 };
@@ -223,11 +239,8 @@ var drawWall = function(i,j) {
     image(getImage("cute/WallBlockTall"),xOrigine+i*(side) ,yOrigine+j*(side) +51 , side, -83);
 };
 // ----------------------------------- drawSword ---------------------------------
-var drawSword = function() {
-    var sideItem = 35;  
-    var aX = 30;
-    var aY = 7;
-    
+var drawSword = function(aX,aY,sideItem) {
+
     var oX = hero[0] * side + aX; // Origine x
     var oY = hero[1] * side + aY; // Origine Y
 
@@ -287,9 +300,7 @@ var drawSword = function() {
 
 // --------------------------------------- overlay ---------------------------
 var drawHeart = function() {
-    rect(0,0, 132, 50);
-    fill(0, 0, 0, 170);
-    noStroke();
+
     for (var i = 0; i < heart; i++) {
         image(getImage("cute/Heart"),14 + i * 36 ,1, 25, 40);
     }
@@ -310,6 +321,7 @@ var drawInventory = function() {
     strokeWeight(5);
     rect(side, side, 300, 300, 30);
     fill(255, 255, 255);
+    drawSword(50,50);
     image(getImage("cute/GemBlue"),oX,oY,iW,iH);
     text(":  " + blueGem, iW + dx, iH + dy);
     image(getImage("cute/Key"),oX,oY + dx,iW,iH);
@@ -343,6 +355,30 @@ var drawPnjText = function() {
     text("press     b     to buy", 126,205);
 };
 
+var drawPnjTextSwordSeller = function() {
+    var iW = 60;
+    var iH = 90;
+    var oX = 111;
+    var oY = 95;
+    
+    var dx = 78;
+    var dy = 40;
+    
+     
+    fill(0, 0, 0, 175);
+    stroke(255, 255, 255);
+    strokeWeight(5);
+    rect(side, side, 300, 198, 30);
+    fill(255, 255, 255);
+    textFont(fontTextStartMenu);
+    text("Sword Seller...", 67,86);
+    textFont(fontInventory);
+    text("= 2 x", oX + dx,oY + dy *2);
+    image(getImage("cute/GemGreen"),oX + dx *2 ,oY,iW,iH);
+    textFont(fontTextStartMenu);
+    text("press     b     to buy", 126,225);
+};
+
 
 var drawStartMenu = function() {
     fill(0, 0, 0);
@@ -356,6 +392,16 @@ var drawStartMenu = function() {
     text("z,q,s,d = to move", 140,287);
     text("i = inventory", 150,318);
     text("e = interaction", 141,346);
+};
+
+var drawGameOver = function() {
+    fill(0, 0, 0);
+    rect(0, 0, width, height);
+    fill(255, 255, 255);
+    textFont(fontTitleStartMenu);
+    text("Game Over", 70,150);
+    textFont(fontTextStartMenu);
+    text("Press espace to restart", 123,214);
 };
 
 var drawChestText = function() {
@@ -404,7 +450,7 @@ for (var j=0;j<allWorldsFront[iWX][iWY].length;j++){
         if (allWorldsFront[iWX][iWY][i][j] === 5) {
         drawSun(i,j);
         }
-        // pnj
+        // pnjMisteriousSeller
         if (allWorldsFront[iWX][iWY][i][j] === 6) {
         drawPnj(i,j);
         }
@@ -444,10 +490,15 @@ for (var j=0;j<allWorldsFront[iWX][iWY].length;j++){
         if (allWorldsFront[iWX][iWY][i][j] === 15) {
         drawMonsterGreen(i,j);
         }
+        // pnj
+        if (allWorldsFront[iWX][iWY][i][j] === 16) {
+        drawPnjSwordSeller(i,j);
+        }
         // Draw Wall
         if (allWorldsFront[iWX][iWY][i][j] === 29) {
         drawWall(i,j);
         }
+        
         
     }
 
@@ -458,8 +509,6 @@ for (var j=0;j<allWorldsFront[iWX][iWY].length;j++){
 var drawHouse = function() {
 for (var j=0;j<allWorldsFront[iWX][iWY].length;j++){
     for (var i=0;i<allWorldsFront[iWX][iWY][j].length;i++){
-        
-        
 
         // Top
         if (allWorldsFront[iWX][iWY][i][j] === 21) {
@@ -512,7 +561,7 @@ for (var j=0;j<allWorldsFront[iWX][iWY].length;j++){
 var drawOverlay = function() {
     // sword
     if (hasSword === true) {
-        drawSword();
+        drawSword(30,7,35);
     }
     // heart
     drawHeart();
@@ -528,9 +577,20 @@ var drawOverlay = function() {
     if (allWorldsFront[iWX][iWY][hero[0]][hero[1]-1] === 6) {
         drawPnjText();    
     }
+    // pnjTextSwordSeller
+    if (allWorldsFront[iWX][iWY][hero[0]][hero[1]-1] === 16) {
+        drawPnjTextSwordSeller(); 
+        drawSword(-160,-38,80);
+    }
+    
+    
     // chestText 
     if (allWorldsFront[iWX][iWY][hero[0]][hero[1]-1] === 7) {
         drawChestText();    
+    }
+    // gameOver 
+    if (isDead === true) {
+        drawGameOver();
     }
     
 };
@@ -598,6 +658,7 @@ var changeWorld = function () {
 };
 //--------------------------------------- keyPressed --------------------------------------
 keyPressed = function() {
+    // -------------- Les deplacements --------------------
     if (key.toString() === 'z') {
         if ((allWorldsBack[iWX][iWY][hero[0]][hero[1]-1] !== 1) && (hero[1] !== 0)) {
             savePositionHero();
@@ -613,7 +674,7 @@ keyPressed = function() {
         
     }
     if (key.toString() === 's') {
-        if ((allWorldsBack[iWX][iWY][hero[0]][hero[1]+1] !== 1) && (hero[1] !== allWorldsBack[iWX][iWY].length -1)){
+        if ((allWorldsBack[iWX][iWY][hero[0]][hero[1]+1] !== 1) && (hero[1] !== allWorldsBack[iWX][iWY].length -1)) {
             savePositionHero();
             hero[1] = hero[1]+1;
         }
@@ -625,6 +686,8 @@ keyPressed = function() {
             hero[0] = hero[0]+1;
         }
     }
+    // -------- Toutes les interactions -----
+    // inventaire
     if (key.toString() === 'i') {
         if (inventoryOpen) {
             inventoryOpen = false;
@@ -632,13 +695,18 @@ keyPressed = function() {
             inventoryOpen = true;
         }
     }
+    // gamestart
     if (key.toString() === ' ') {
         gameStart = false;
     }
+    // acheter
     if (key.toString() === 'b') {
         if (allWorldsFront[iWX][iWY][hero[0]][hero[1]-1] === 6 && blueGem > 2) {
             blueGem = blueGem - 3;
             greenGem++;
+        }if (allWorldsFront[iWX][iWY][hero[0]][hero[1]-1] === 16 && greenGem > 1) {
+            greenGem = greenGem - 2;
+            hasSword = true;
         }
         
     }
@@ -650,6 +718,10 @@ keyPressed = function() {
             keyChest--;
         }
     }
+    if (key.toString() === ' ' && isDead === true) {
+        Program.restart();
+    }
+    
     
     
 };
@@ -666,6 +738,7 @@ var draw = function() {
     drawOverlay();
     changeWorld();
     fightMonster();
+    checkDeath();
     
     
     text(hero, 304, 25);
