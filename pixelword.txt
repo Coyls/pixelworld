@@ -602,8 +602,10 @@ var looseHeart = function() {
 
 var fightMonster = function() {
     for (var i=0; i < monsters.length; i++ ){
-        if (allWorldsFront[iWX][iWY][hero[0]][hero[1]-1] === monsters[i] || allWorldsFront[iWX][iWY][hero[0]][hero[1]+1] === monsters[i] || allWorldsFront[iWX][iWY][hero[0]+1][hero[1]] === monsters[i] || allWorldsFront[iWX][iWY][hero[0]-1][hero[1]] === monsters[i]) {
-            looseHeart();
+        if (hero[0] < 7 && hero[0] > 0 && hero[1] < 7 && hero[1] > 0) {
+            if (allWorldsFront[iWX][iWY][hero[0]][hero[1]-1] === monsters[i] || allWorldsFront[iWX][iWY][hero[0]][hero[1]+1] === monsters[i] || allWorldsFront[iWX][iWY][hero[0]+1][hero[1]] === monsters[i] || allWorldsFront[iWX][iWY][hero[0]-1][hero[1]] === monsters[i]) {
+                looseHeart();
+            }
         }
         
             // cree un if si jai une arme  et reparer le bug en x
