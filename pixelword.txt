@@ -100,7 +100,7 @@ var fontInventory = createFont("fantasy",40);
 var fontTitleStartMenu = createFont("fantasy",60);
 var fontTextStartMenu = createFont("fantasy",20);
 
-var buySword = false;
+var fight = 0;
 
 // Front
 var xOrigine = 0;
@@ -130,6 +130,29 @@ var hasSword = false;
 
 // Monstres
 var monsters = [12,13,14,15];
+
+var killMonster = function() {
+    for (var i = 0; i < monsters.length; i++){
+        if (allWorldsFront[iWX][iWY][hero[0]][hero[1]-1] === monsters[i]) {
+            allWorldsFront[iWX][iWY][hero[0]][hero[1]-1] = 2;
+            allWorldsBack[iWX][iWY][hero[0]][hero[1]-1] = 0;
+        }
+        if (allWorldsFront[iWX][iWY][hero[0]][hero[1]+1] === monsters[i]) {
+            allWorldsFront[iWX][iWY][hero[0]][hero[1]+1] = 2;
+            allWorldsBack[iWX][iWY][hero[0]][hero[1]+1] = 0;
+        }
+        if (allWorldsFront[iWX][iWY][hero[0]+1][hero[1]] === monsters[i]) {
+            allWorldsFront[iWX][iWY][hero[0]+1][hero[1]] = 2;
+            allWorldsBack[iWX][iWY][hero[0]+1][hero[1]] = 0;
+        }
+        if (allWorldsFront[iWX][iWY][hero[0]-1][hero[1]] === monsters[i]) {
+            allWorldsFront[iWX][iWY][hero[0]-1][hero[1]] = 2;
+            allWorldsBack[iWX][iWY][hero[0]-1][hero[1]] = 0;
+        }
+    }
+    
+
+};
 
 // Death
 var isDead = false;
@@ -604,13 +627,20 @@ var fightMonster = function() {
     for (var i=0; i < monsters.length; i++ ){
         if (hero[0] < 7 && hero[0] > 0 && hero[1] < 7 && hero[1] > 0) {
             if (allWorldsFront[iWX][iWY][hero[0]][hero[1]-1] === monsters[i] || allWorldsFront[iWX][iWY][hero[0]][hero[1]+1] === monsters[i] || allWorldsFront[iWX][iWY][hero[0]+1][hero[1]] === monsters[i] || allWorldsFront[iWX][iWY][hero[0]-1][hero[1]] === monsters[i]) {
-                looseHeart();
+                if (hasSword) {
+                    var fight = round(random(0,2));
+                    if (fight > 1) {
+                        killMonster();
+                    } else {
+                       looseHeart(); 
+                    }
+                    
+                } else {
+                    looseHeart();
+                }
             }
         }
-        
-            // cree un if si jai une arme  et reparer le bug en x
-            
-        
+
     }
     
 
@@ -720,7 +750,7 @@ keyPressed = function() {
             keyChest--;
         }
     }
-    if (key.toString() === ' ' && isDead === true) {
+    if (key.toString() === ' ' && isDead) {
         Program.restart();
     }
     
@@ -746,6 +776,7 @@ var draw = function() {
     text(hero, 304, 25);
     text(iWX, 366, 25);
     text(iWY, 383,25);
+    text(fight, 257,25);
     
     //text(allWorldsFront[iWX][iWY][hero[0]][hero[1]-1], 112 ,89);
 
