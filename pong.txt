@@ -1,0 +1,143 @@
+
+// context
+var screenWidth = width;
+var screenHeight = height;
+// P1
+var p1PadX = 0;
+var p1PadY = 0;
+var p1PadW = 20;
+var p1PadH = 80;
+var p1Speed = 10;
+
+// P2
+var p2PadX = 380;
+var p2PadY = 0;
+var p2PadW = 20;
+var p2PadH = 80;
+var p2Speed = 10;
+
+// Balle
+var balleX = 200;
+var balleY = 100;
+var balleR = 10;
+var balleSpeed = 2;
+
+// Direction
+var p1DirectionY = 0;
+var p2DirectionY = 0;
+var balleDirX = 1;
+var balleDirY = 1;
+
+// game context
+var gameFinish = false;
+var winner = 0;
+var p1Points = 0;
+var p2Points = 0;
+
+// Calculer les nouvelle dirrection en fonction des directions (touche enfoncé/relevé)
+var adjustPosition = function() {
+    p1PadY = p1PadY+(p1DirectionY * p1Speed);
+    p2PadY = p2PadY+(p2DirectionY * p2Speed);
+    
+    balleX = balleX+(balleDirX * balleSpeed);
+    balleY = balleY+(balleDirY * balleSpeed);
+    
+    if (balleX+balleR > 400) {
+        balleDirX = 0;
+        balleDirY = 0;
+        gameFinish = true;
+        winner = 1;
+
+    }
+    if (balleX-balleR < 0) {
+        balleDirX = 0;
+        balleDirY = 0;
+        gameFinish = true;
+        winner = 2;
+    }
+    if (balleY+balleR > 400) {
+        balleDirY = -1 * balleDirY;
+    }
+    if (balleY-balleR < 0) {
+        balleDirY = -1 * balleDirY;
+    }
+    
+    if ((balleY > p2PadY) && (balleY < p2PadY + p2PadH) && (balleX + balleR > p2PadX)) {
+        balleDirX = -1 * balleDirX;
+    }
+    
+    if ((balleY > p1PadY) && (balleY < p1PadY + p1PadH) && (balleX - balleR < p1PadX+p1PadW)) {
+        balleDirX = -1 * balleDirX;
+    }
+};
+
+// Draw elements
+var drawP1 = function() {
+    fill(255, 0, 0);
+    rect(p1PadX, p1PadY, p1PadW, p1PadH);
+};
+var drawP2 = function() {
+    fill(0, 0, 255);
+    rect(p2PadX, p2PadY, p2PadW, p2PadH);
+};
+var drawBalle = function () {
+    fill(0, 255, 0);
+    ellipse(balleX, balleY, balleR * 2,  balleR * 2);
+};
+
+// Affichage
+var draw = function() {
+    background(0, 0, 0);
+    
+    if (!gameFinish) {
+    
+        adjustPosition();
+        drawP1();
+        drawP2();
+        drawBalle();
+    } else {
+        if (winner === 1){
+            text("P2 Looser", 200, 200, 200, 200);
+        }
+        if (winner === 2){
+            text("P1 Looser", 200, 200, 200, 200);
+        }
+        
+    }
+    
+    
+    
+    
+};
+
+
+// gestion des touches  
+keyPressed = function() {
+    if (key.toString() === 'z') {
+        p1DirectionY = -1; 
+    }
+    if (key.toString() === 's') {
+        p1DirectionY = 1;
+    }
+    if (key.toString() === 'o') {
+        p2DirectionY = -1;
+    }
+    if (key.toString() === 'l') {
+        p2DirectionY = 1;
+    }
+};
+keyReleased = function() {
+    if (key.toString() === 'z') {
+        p1DirectionY = 0; 
+    }
+    if (key.toString() === 's') {
+        p1DirectionY = 0;
+    }
+    if (key.toString() === 'o') {
+        p2DirectionY = 0;
+    }
+    if (key.toString() === 'l') {
+        p2DirectionY = 0;
+    }
+};
+

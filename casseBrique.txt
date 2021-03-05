@@ -1,0 +1,197 @@
+// context
+var screenWidth = width;
+var screenHeight = height;
+
+// Pad
+var padX = 160;
+var padY = 360;
+var padW = 80;
+var padH = 20;
+var padspeed = 10;
+
+// Balle
+var balleX = 200;
+var balleY = 340;
+var balleR = 10;
+var balleSpeed = 2;
+
+// Brick
+var xOrigineBrick=40;
+var yOrigineBrick=40;
+var sideBrick=50;
+
+// wall Structure
+var nbLigne=4;
+var nbColone=6;
+
+// Direction
+var padDirectionX = 0;
+var balleDirX = 1;
+var balleDirY = 1;
+
+// game context
+var scoreMax = 0;
+var score = 0;
+var gameFinish = false;
+var loose = false;
+var victory = false;
+var life = 3;
+//WALL
+
+var wall = [];
+// creation du tableau pourt savoir si les brique on été cassé ou non
+for (var j=0;j<nbLigne;j++){
+    wall[j] = [];
+        for (var i=0;i<nbColone;i++){
+            var randomNum = floor(random(1, 4));
+            wall[j][i] = randomNum;
+            scoreMax = scoreMax + randomNum;
+        }
+    }
+    
+    
+
+// Calculer les nouvelle dirrection 
+var adjustPosition = function() {
+    // deplacement du pad
+    padX = padX+(padDirectionX * padspeed);
+    
+    // vitesse de la balle
+    balleX = balleX+(balleDirX * balleSpeed);
+    balleY = balleY+(balleDirY * balleSpeed);
+    
+    // Rebond contre les mur et defaite
+    if (balleX+balleR > 400) {
+        balleDirX = -1 * balleDirX;
+    }
+    if (balleX-balleR < 0) {
+        balleDirX = -1 * balleDirX;
+    }
+    if (balleY-balleR < 0) {
+        balleDirY = -1 * balleDirY;
+    }
+    if (balleY+balleR > 400) {
+        life--;
+        background(255, 0, 0);
+        balleDirY = -1 * balleDirY;
+        if (life === 0){
+            balleDirX = 0;
+            balleDirY = 0;
+            gameFinish = true;
+            loose = true;
+        } 
+       
+       
+    }
+    // rebond pad
+    if ((balleX > padX) && (balleX < padX + padW) && (balleY + balleR > padY)) {
+        balleDirY = -1 * balleDirY;
+    }
+};
+
+
+
+// Les colision contre les brique
+var colisionTest = function() { 
+
+    // Verifie pour chaque case du tableau si l'un des coté de la balle ce trouve dans une brique 
+    for (var j=0;j<nbLigne;j++){
+        for (var i=0;i<nbColone;i++){
+                if((balleX + balleR > xOrigineBrick+i*(sideBrick)) && (balleX - balleR < xOrigineBrick+i*(sideBrick)+sideBrick) && (balleY + balleR > yOrigineBrick+j*(sideBrick)) && (balleY - balleR < yOrigineBrick+j*(sideBrick)+sideBrick) && (wall[j][i] > 0)) {
+                    // si elle si trouve on verifi si c'est verticale ou horizontale
+                    if ((balleY < yOrigineBrick+j*(sideBrick)) || (balleY > yOrigineBrick+j*(sideBrick)+sideBrick)){
+                         balleDirY = -1 * balleDirY;
+                    } else if ((balleX < xOrigineBrick+j*(sideBrick)) || (balleX > xOrigineBrick+j*(sideBrick)+sideBrick)){
+                         balleDirX = -1 * balleDirX;
+                    }
+                    // on increment le score et modifie le tableau pour indiquer la brique a                     été detruite
+                    wall[j][i] = wall[j][i] - 1;
+                    score++;
+                }
+            }
+        }
+}; 
+// ----------------------------------------------------------------------------------
+
+
+// verifie si le tableau a ete completement detruit
+var wallBreak = function() {
+        if (scoreMax === score) {
+            gameFinish = true;
+            victory = true;
+        }
+};
+
+
+// Draw elements
+var drawPad = function() {
+    fill(255, 0, 0);
+    rect(padX, padY, padW, padH);
+};
+var drawBalle = function () {
+    fill(0, 255, 0);
+    ellipse(balleX, balleY, balleR * 2,  balleR * 2);
+};
+
+var drawBrick =  function() {
+    // cree une brique coloré resistant en fonction du nombre associer
+    for (var j=0;j<nbLigne;j++){
+        for (var i=0;i<nbColone;i++) {
+                if(wall[j][i] !== 0) {
+                    if (wall[j][i] === 1) {fill(0, 0, 255);}
+                    if (wall[j][i] === 2) {fill(0, 255, 0);}
+                    if (wall[j][i] === 3) {fill(255, 0, 0);}
+                    rect(xOrigineBrick+i*(sideBrick),yOrigineBrick+j*(sideBrick),sideBrick,sideBrick);
+                } 
+        }
+    }
+};
+
+var drawText = function () {
+    text("Remaining life : " +life, 10, 20);
+};
+
+// DRAW FUNCTION ---------------------------------------------------------------------------
+
+var draw = function() {
+    background(0, 0, 0);
+    if (!gameFinish) {
+        drawPad();
+        drawBalle();
+        drawBrick();
+        adjustPosition();
+        colisionTest();
+        wallBreak();
+        drawText();
+    } else {
+        if (victory === true) {
+            text("Victoire", 200, 200, 200, 200);
+        }
+        if (loose === true) {
+            text("Defaite", 200, 200, 200, 200);
+        }
+    }   
+    
+
+};
+//-----------------------------------------
+// gestion des touches  
+keyPressed = function() {
+    if (key.toString() === 'q') {
+        padDirectionX = -1; 
+    }
+    if (key.toString() === 'd') {
+        padDirectionX = 1;
+    }
+};
+keyReleased = function() {
+    if (key.toString() === 'q') {
+        padDirectionX = 0; 
+    }
+    if (key.toString() === 'd') {
+        padDirectionX = 0;
+    }
+};
+
+
+	

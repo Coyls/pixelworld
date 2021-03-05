@@ -1,0 +1,373 @@
+// Direction
+var p1DirectionX = 0;
+var p1DirectionY = 0;
+
+var enemyWidth = 48;
+var enemyHeight = 80;
+var enemySide = 55;
+
+var shot = false;
+
+var addEnemy = function() {
+   return [floor(random(enemyWidth,width-enemyWidth)),-enemyHeight,enemyWidth,-enemyHeight];    
+};
+
+var score = 0;
+var monsterSpeed = 1;
+var checkScore = 50;
+
+// Shot creator
+var shotHeight = 20;
+var shotWidth = 20;
+var shots = [];
+
+var addShot = function(x,y) {
+    return [x,y,shotWidth,shotHeight];
+};
+
+var enemies = [];
+
+var m = millis()/1000 + 2;
+var y = 0;
+
+var currentInterval = 2;
+
+var gameOver = function() {
+    fill(0, 0, 0);
+    text("Game Over",161,119,100,102);
+    text("Your score " + score,153,173,100,102);
+    text("press a to restart",149,225,139,114);
+};
+
+// P1
+var p1PadX = 179;
+var p1PadY = 311;
+var p1PadW = 60;
+var p1PadH = 60;
+var p1Speed = 10;
+
+var spaceship = function(oX,oY) {
+
+    var templateSide = 55;
+    
+    var template = [
+        
+        [0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,1,0,0,1,1,1,1,1,0,0,1,0,0,0,0,0,0],
+        [0,0,0,0,0,0,1,0,1,1,1,1,1,1,1,0,1,0,0,0,0,0,0],
+        [0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0],
+        [0,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1,0],
+        [0,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,0],
+        [0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
+        [0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
+        [1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1],
+        [1,1,1,0,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,0,1,1,1],
+        [1,1,1,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,1,1,1],
+        [1,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,1],
+        [1,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,1],
+        [1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1],
+        [0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0],
+        [0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0],
+        
+        
+    
+    ];
+    
+    // permet de cree le "responsive"
+    var pSide = templateSide / template.length;
+    
+    // generer une grille vide par defaut
+    for (var i = 0; i < template.length ; i++) {
+        for (var j = 0; j < template[i].length ; j++) {
+            // Vide par defaut
+            noFill();
+            // Les conditions
+            if (template[i][j] === 1){
+                fill(0, 0, 0);
+            }
+            
+            
+            // enleve les bordure
+            noStroke();
+            // genere le pixel
+            rect(oX + j * pSide, oY + i * pSide, pSide * 1.1, pSide* 1.1);
+
+        }
+    }
+};
+var drawShot = function(oX,oY,templateW) {
+
+    var template = [
+        
+        [0,0,1,0,0],
+        [0,1,0,1,0],
+        [1,0,0,1,1],
+        [1,0,1,1,1],
+        [1,1,1,1,1],
+        [1,0,1,0,1],
+        [0,0,0,0,0],
+        [0,0,0,0,0],
+        [0,0,1,0,0],
+        [0,0,1,0,0],
+        [0,0,0,0,0],
+        [0,0,1,0,0],
+        [0,0,1,0,0],
+
+    
+    ];
+    
+    // permet de cree le "responsive"
+    var pSide = templateW / template.length;
+    
+    // generer une grille vide par defaut
+    for (var i = 0; i < template.length ; i++) {
+        for (var j = 0; j < template[i].length ; j++) {
+            // Vide par defaut
+            noFill();
+            // Les conditions
+            if (template[i][j] === 1){
+                fill(0, 0, 0);
+            }
+            
+            // enleve les bordure
+            noStroke();
+            // genere le pixel
+            rect(oX + j * pSide, oY + i * pSide, pSide * 1.1, pSide* 1.1);
+
+        }
+    }
+};
+var alien = function(oX,oY) {
+    
+    var templateSide = 75;
+
+    var template = [
+        
+        [0,0,0,0,1,0,0,0,0,0],
+        [0,0,0,0,1,0,0,0,0,0],
+        [0,0,0,0,0,1,0,0,0,0],
+        [0,0,0,0,0,1,0,0,0,0],
+        [0,0,0,0,1,0,0,0,0,0],
+        [0,0,0,1,1,0,0,0,0,0],
+        [0,0,0,1,1,0,0,0,0,0],
+        [0,0,0,1,1,1,0,0,0,0],
+        [1,0,0,0,1,1,0,0,0,1],
+        [1,0,0,0,1,1,1,0,0,1],
+        [0,1,0,1,1,1,1,0,1,0],
+        [0,0,1,1,1,1,1,1,0,0],
+        [0,0,1,1,0,0,1,1,0,0],
+        [0,0,1,1,0,0,1,1,0,0],
+        [0,0,0,1,1,1,1,0,0,0],
+        [0,0,0,0,1,1,0,0,0,0],
+        
+        
+    
+
+    
+    ];
+    
+    // permet de cree le "responsive"
+    var pSide = templateSide / template.length;
+    
+    // generer une grille vide par defaut
+    for (var i = 0; i < template.length ; i++) {
+        for (var j = 0; j < template[i].length ; j++) {
+            // Vide par defaut
+            noFill();
+            // Les conditions
+            if (template[i][j] === 1){
+                fill(0, 0, 0);
+            }
+            
+            // enleve les bordure
+            noStroke();
+            // genere le pixel
+            rect(oX + j * pSide, oY + i * pSide, pSide * 1.1, pSide* 1.1);
+
+        }
+    }
+};
+
+// game context
+var gameFinish = false;
+var winner = 0;
+var p1Points = 0;
+var p2Points = 0;
+
+
+// Le pad
+var drawP1 = function() {
+    fill(255, 0, 0);
+    spaceship(p1PadX,p1PadY,p1PadW);
+};
+
+// Calculer les nouvelle dirrection en fonction des directions (touche enfoncé/relevé)
+var adjustPosition = function() {
+    p1PadX = p1PadX+(p1DirectionX * p1Speed);
+    p1PadY = p1PadY+(p1DirectionY * p1Speed);
+};
+
+// colision 
+
+var rectIntersectRect = function(x1,y1,w1,h1,x2,y2,w2,h2) {
+    
+    if (x1 > x2 && x1 < x2 + w2 && y1 < y2 && y1 > y2 + h2) {
+        return true;
+    }
+    if (x1 > x2 && x1 < x2 + w2 && y1+h1 < y2 && y1+h1 > y2 + h2) {
+        return true;
+    }
+    if (x1 + w1 > x2 && x1+w1 < x2 + w2 && y1 < y2 && y1 > y2 + h2) {
+        return true;
+    }
+    if (x1 + w1 > x2 && x1+w1 < x2 + w2 && y1 + h1 < y2 && y1 + h1 > y2 + h2) {
+        return true;
+    }
+
+    return false;
+};
+
+var detectCollision = function() {
+    
+    for (var i = 0; i < enemies.length; i++) {
+        if(rectIntersectRect(p1PadX, p1PadY, p1PadW, p1PadH, enemies[i][0],enemies[i][1],enemies[i][2],enemies[i][3])) {
+            
+            gameFinish = true;
+        }
+    }
+    
+    for (var i = 0; i < enemies.length; i++) {
+        for (var j = 0; j < shots.length; j++) {
+            if(rectIntersectRect(shots[j][0],shots[j][1],shots[j][2],shots[j][3], enemies[i][0],enemies[i][1],enemies[i][2],enemies[i][3])) {
+                
+                enemies.splice(i,1);
+                shots.splice(j,1);
+                
+                score = score + 10;
+                if (score === checkScore)  {
+                    monsterSpeed = monsterSpeed + 0.25;
+                    checkScore = score + 50;
+                } 
+            }
+        }
+    }
+};
+
+var draw = function() {
+    background(189, 189, 189);
+    if (!gameFinish) {
+ 
+    var t = millis()/1000;
+    
+    // Enemies apparition
+    if (t > m) {
+        enemies.push(addEnemy());
+        currentInterval = floor(random(0.5,2));
+        m = millis()/1000 + currentInterval;
+        
+        // text("spawn", 50, 50,100,100);
+    }
+    if (shot) {
+        shots.push(addShot(p1PadX+p1PadW/2 - 4,p1PadY - 10));
+        shot = false;
+    }
+    
+    // Shots -----------------------------------------------------------
+    var indexOfShotsToRemove = [];
+    
+    for (var i = 0; i<shots.length; i+=1) {
+        shots[i][1] = shots[i][1]-7;
+        if (shots[i][1] < 0 - shotHeight) {
+            indexOfShotsToRemove.push(i);
+        }
+        fill(0, 0, 0);
+        drawShot(shots[i][0],shots[i][1],shots[i][2]);
+     }
+    
+    for (var i = 0; i<indexOfShotsToRemove.length; i+=1) {
+         shots.splice(indexOfShotsToRemove,1);
+     }
+    
+    
+    // Enemies --------------------------------------------------------
+    var indexOfEnemiesToRemove = [];
+    
+    for (var i = 0; i<enemies.length; i+=1) {
+        enemies[i][1] = enemies[i][1]+ monsterSpeed;
+        if (enemies[i][1] > 400 + enemyHeight) {
+            indexOfEnemiesToRemove.push(i);
+        }
+        fill(247, 5, 61);
+        // rect(enemies[i][0],enemies[i][1],enemies[i][2],enemies[i][3]);
+        alien(enemies[i][0],enemies[i][1] - 80);
+     }
+    
+    for (var i = 0; i<indexOfEnemiesToRemove.length; i+=1) {
+        enemies.splice(indexOfEnemiesToRemove,1);
+     }
+    
+    // Draws ----------------------------------------------------------- 
+    
+    adjustPosition();
+    drawP1();
+    detectCollision();
+    fill(0, 0, 0);
+    text("Score : " + score,27,28,108,91);
+
+    } else {
+        
+        gameOver();
+    }
+};
+
+
+
+
+
+
+
+
+// gestion des touches  ----------------------------------------------------------------
+keyPressed = function() {
+    if (key.toString() === 'z' && p1PadY > 0) {
+        p1DirectionY = -1; 
+    }
+    if (key.toString() === 's') {
+        p1DirectionY = 1;
+    }
+    if (key.toString() === 'q') {
+        p1DirectionX = -1;
+    }
+    if (key.toString() === 'd') {
+        p1DirectionX = 1;
+    }
+    if (key.toString() === 'a') {
+        Program.restart();
+    }
+};
+keyReleased = function() {
+    if (key.toString() === 'z' ) {
+        p1DirectionY = 0; 
+    }
+    if (key.toString() === 's') {
+        p1DirectionY = 0;
+    }
+    if (key.toString() === 'q') {
+        p1DirectionX = 0;
+    }
+    if (key.toString() === 'd') {
+        p1DirectionX = 0;
+    }
+    
+    if (key.toString() === ' ') {
+        shot = true;
+    }
+};
+
