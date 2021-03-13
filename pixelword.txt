@@ -26,7 +26,7 @@ var allWorldsFront = [[[[1,25,22,28,29,5,21,23],// World : 0 0
                         [0,5,5,5,5,9,9,9],
                         [0,5,5,5,9,9,9,9],
                         [9,9,9,9,9,9,0,5],
-                        [9,9,9,9,9,2,0,0]]
+                        [9,9,9,9,9,19,0,0]]
                        
                         ],[
                            
@@ -36,15 +36,15 @@ var allWorldsFront = [[[[1,25,22,28,29,5,21,23],// World : 0 0
                         [1,0,0,0,10,5,0,0],
                         [5,5,5,5,5,5,0,10],
                         [1,25,28,29,10,5,10,10],
-                        [1,21,23,29,6,5,25,28],
+                        [1,21,23,29,18,5,25,28],
                         [1,21,23,29,0,5,21,23]],
                       
                        [[9,9,9,9,5,9,9,1],// World : 1 1
                         [9,9,9,9,0,9,9,1],
-                        [5,0,1,1,0,0,9,1],
+                        [5,0,1,1,0,4,9,1],
                         [5,0,0,0,0,0,9,1],
                         [5,0,0,0,0,0,0,5],
-                        [9,9,4,0,0,2,9,10],
+                        [9,9,42,0,0,2,9,10],
                         [9,9,9,9,0,9,9,10],
                         [9,9,11,11,5,11,9,10]],
                       
@@ -79,15 +79,16 @@ var allWorldsFront = [[[[1,25,22,28,29,5,21,23],// World : 0 0
                       
                        [[9,9,9,9,9,9,9,9],// World : 2 2
                         [11,0,9,9,9,9,9,9],
-                        [11,0,0,0,0,0,0,0],
-                        [0,0,0,0,11,0,0,0],
+                        [11,0,0,0,0,0,0,11],
+                        [0,0,0,0,11,0,0,11],
                         [0,11,11,11,11,0,10,11],
-                        [0,0,11,11,0,0,0,5],
+                        [0,0,11,11,7,0,0,5],
                         [0,0,0,11,10,0,0,5],
                         [11,5,5,11,11,10,0,0]]]];
-
+                        
+// ------------------------ Generation backWorlds ----------------------------------------
 var allWorldsBack = [];
-var obstacleList = [1,6,7,8,9,11,12,13,14,15,16,29,21,22,23,24,25,26,27,28];
+var obstacleList = [1,6,7,8,9,11,10,12,13,14,15,16,29,21,22,23,24,25,26,27,28,18];
 
 for (var i = 0; i < allWorldsFront.length; i++){
     allWorldsBack[i] = [];
@@ -138,14 +139,13 @@ var savePositionHero = function() {
     lastPositionHero = [hero[0],hero[1]];
 };
 
-
-
 // inventory
 var inventoryOpen = false;
 
 var keyChest = 0;
 var blueGem = 0;
 var greenGem = 0;
+var yellowGem = 0;
 var heart = 3;
 var hasSword = false;
 
@@ -155,19 +155,19 @@ var monsters = [12,13,14,15];
 var killMonster = function() {
     for (var i = 0; i < monsters.length; i++){
         if (allWorldsFront[iWX][iWY][hero[0]][hero[1]-1] === monsters[i]) {
-            allWorldsFront[iWX][iWY][hero[0]][hero[1]-1] = 2;
+            allWorldsFront[iWX][iWY][hero[0]][hero[1]-1] = 17;
             allWorldsBack[iWX][iWY][hero[0]][hero[1]-1] = 0;
         }
         if (allWorldsFront[iWX][iWY][hero[0]][hero[1]+1] === monsters[i]) {
-            allWorldsFront[iWX][iWY][hero[0]][hero[1]+1] = 2;
+            allWorldsFront[iWX][iWY][hero[0]][hero[1]+1] = 17;
             allWorldsBack[iWX][iWY][hero[0]][hero[1]+1] = 0;
         }
         if (allWorldsFront[iWX][iWY][hero[0]+1][hero[1]] === monsters[i]) {
-            allWorldsFront[iWX][iWY][hero[0]+1][hero[1]] = 2;
+            allWorldsFront[iWX][iWY][hero[0]+1][hero[1]] = 17;
             allWorldsBack[iWX][iWY][hero[0]+1][hero[1]] = 0;
         }
         if (allWorldsFront[iWX][iWY][hero[0]-1][hero[1]] === monsters[i]) {
-            allWorldsFront[iWX][iWY][hero[0]-1][hero[1]] = 2;
+            allWorldsFront[iWX][iWY][hero[0]-1][hero[1]] = 17;
             allWorldsBack[iWX][iWY][hero[0]-1][hero[1]] = 0;
         }
     }
@@ -177,6 +177,7 @@ var killMonster = function() {
 
 // Death
 var isDead = false;
+var win = false;
 
 var checkDeath = function() {
     if (heart === 0) {
@@ -194,13 +195,15 @@ var drawWater = function(i,j) {
 var drawBuisson = function(i,j) {
     image(getImage("cute/TreeShort"),xOrigine+i*(side) ,yOrigine+j*(side) -28, side ,78);
 };
-
 var drawTree = function(i,j) {
     image(getImage("cute/TreeTall"),xOrigine+i*(side) ,yOrigine+j*(side) -28, side ,78);
 };
-
 var drawObstacle = function(i,j) {
     image(getImage("cute/Rock"),xOrigine+i*(side) ,yOrigine+j*(side) -28, side ,78);
+};
+var drawHeartOnGround = function(i,j) {
+    image(getImage("cute/Heart"),xOrigine+i*(side) + 10 ,yOrigine+j*(side) -5 ,33,49 );
+
 };
 var drawKey = function(i,j) {
     image(getImage("cute/Key"),xOrigine+i*(side) + 5 ,yOrigine+j*(side) -5 ,39,49 );
@@ -210,42 +213,42 @@ var drawBlueGem = function(i,j) {
     image(getImage("cute/GemBlue"),xOrigine+i*(side) + 5 ,yOrigine+j*(side) -5 ,39,49 );
 
 };
+var drawYellowGem = function(i,j) {
+    image(getImage("cute/GemOrange"),xOrigine+i*(side) + 5 ,yOrigine+j*(side) -5 ,39,49 );
+
+};
 var drawEnd = function(i,j) {
     image(getImage("cute/DoorTallClosed"),xOrigine+i*(side) ,yOrigine+j*(side) - 21, side, 74);};
-
 var drawHero = function(i,j) {
     image(getImage("cute/CharacterBoy"), side * (hero[0]),side * (hero[1]) - 28,46,85);
 };
-
 var drawMonsterRed = function(i,j) {
     image(getImage("avatars/piceratops-ultimate"),xOrigine+i*(side) ,yOrigine+j*(side) - 34,62,85);
 };
-
 var drawMonsterGreen = function(i,j) {
     image(getImage("avatars/leafers-ultimate"),xOrigine+i*(side) ,yOrigine+j*(side) - 34,62,85);
 };
-
 var drawMonsterYellow = function(i,j) {
     image(getImage("avatars/primosaur-ultimate"),xOrigine+i*(side) ,yOrigine+j*(side) - 34,62,85);
 };
-
-
 var drawMonsterBlue = function(i,j) {
     image(getImage("avatars/aqualine-ultimate"),xOrigine+i*(side) ,yOrigine+j*(side) - 34,62,85);
 };
-
 var drawSun = function(i,j) {
     image(getImage("cute/DirtBlock"),xOrigine+i*(side) ,yOrigine+j*(side) -30, side ,102);
 };
-
 var drawPnj = function(i,j) {
     image(getImage("cute/CharacterCatGirl"),xOrigine+i*(side) ,yOrigine+j*(side) - 28,46,85);
 };
-
+var drawPnjWin = function(i,j) {
+    image(getImage("cute/CharacterPrincessGirl"),xOrigine+i*(side) ,yOrigine+j*(side) - 28,46,85);
+};
 var drawPnjSwordSeller = function(i,j) {
     image(getImage("cute/CharacterHornGirl"),xOrigine+i*(side) ,yOrigine+j*(side) - 28,46,85);
 };
-
+var drawPnjHearts = function(i,j) {
+    image(getImage("cute/CharacterPinkGirl"),xOrigine+i*(side) ,yOrigine+j*(side) - 28,46,85);
+};
 var drawChestClose = function(i,j) {
     image(getImage("cute/ChestClosed"),xOrigine+i*(side) + 5 ,yOrigine+j*(side) -5 ,39,49 );
 };
@@ -282,7 +285,8 @@ var drawRoofCornerLB = function(i,j) {
 var drawWall = function(i,j) {
     image(getImage("cute/WallBlockTall"),xOrigine+i*(side) ,yOrigine+j*(side) +51 , side, -83);
 };
-// ----------------------------------- drawSword ---------------------------------
+
+//  drawSword
 var drawSword = function(aX,aY,sideItem) {
 
     var oX = hero[0] * side + aX; // Origine x
@@ -340,9 +344,7 @@ var drawSword = function(aX,aY,sideItem) {
         }
     }
 };
-
-
-// --------------------------------------- overlay ---------------------------
+//  overlay  
 var drawHeart = function() {
 
     for (var i = 0; i < heart; i++) {
@@ -363,15 +365,18 @@ var drawInventory = function() {
     fill(0, 0, 0, 175);
     stroke(255, 255, 255);
     strokeWeight(5);
-    rect(side, side, 300, 300, 30);
+    rect(side, side, 300, 252, 30);
     fill(255, 255, 255);
     drawSword(50,50);
+    fill(255, 252, 255);
     image(getImage("cute/GemBlue"),oX,oY,iW,iH);
     text(":  " + blueGem, iW + dx, iH + dy);
     image(getImage("cute/Key"),oX,oY + dx,iW,iH);
     text(":  " + keyChest, iW + dx, iH + dy*3);
     image(getImage("cute/GemGreen"),oX,oY + dx * 2,iW,iH);
     text(":  " + greenGem, iW + dx, iH + dy*5);
+    image(getImage("cute/GemOrange"),oX + dy * 3.9,oY + dx * 0,iW,iH);
+    text(":  " + yellowGem, iW + dx *2.7, iH + dy*1);
 };
 
 var drawPnjText = function() {
@@ -399,6 +404,57 @@ var drawPnjText = function() {
     text("press     b     to buy", 126,205);
 };
 
+var drawPnjTextHearts = function() {
+    var iW = 60;
+    var iH = 90;
+    var oX = 80;
+    var oY = 81;
+    
+    var dx = 88;
+    var dy = 35;
+    
+     
+    fill(0, 0, 0, 175);
+    stroke(255, 255, 255);
+    strokeWeight(5);
+    rect(side, side, 300, 198, 30);
+    fill(255, 255, 255);
+    textFont(fontTextStartMenu);
+    text("Heart seller", 67,86);
+    image(getImage("cute/Heart"),oX,oY,iW,iH);
+    textFont(fontInventory);
+    text("=", oX + dx,oY + dy *2);
+    image(getImage("cute/GemGreen"),oX + dx *1.5 ,oY,iW,iH);
+    textFont(fontTextStartMenu);
+    text("press     b     to buy", 126,205);
+};
+
+var drawPnjTextWin = function() {
+    var iW = 27;
+    var iH = 48;
+    var oX = -17;
+    var oY = 122;
+    
+    var dx = 88;
+    var dy = 35;
+    
+     
+    fill(0, 0, 0, 175);
+    stroke(255, 255, 255);
+    strokeWeight(5);
+    rect(side, side, 300, 198, 30);
+    fill(255, 255, 255);
+    textFont(fontTextStartMenu);
+    text("God", 67,86);
+    textFont(fontInventory);
+    textFont(fontTextStartMenu);
+    text("Hi, if u want to return in your world", 63,131);
+    text("bring me 4 ", 63,160);
+    image(getImage("cute/GemOrange"),oX + dx *2 ,oY,iW,iH);
+    text(". Good luck ", 197,160);
+    text("press     b     to give gems", 104,223);
+};
+
 var drawPnjTextSwordSeller = function() {
     var iW = 60;
     var iH = 90;
@@ -423,7 +479,6 @@ var drawPnjTextSwordSeller = function() {
     text("press     b     to buy", 126,225);
 };
 
-
 var drawStartMenu = function() {
     fill(0, 0, 0);
     rect(0, 0, width, height);
@@ -438,14 +493,15 @@ var drawStartMenu = function() {
     text("e = interaction", 141,346);
 };
 
-var drawGameOver = function() {
+var drawGameOver = function(end) {
     fill(0, 0, 0);
     rect(0, 0, width, height);
     fill(255, 255, 255);
     textFont(fontTitleStartMenu);
     text("Game Over", 70,150);
+    text(end, 86,236);
     textFont(fontTextStartMenu);
-    text("Press espace to restart", 123,214);
+    text("Press espace to restart", 110,317);
 };
 
 var drawChestText = function() {
@@ -465,8 +521,6 @@ var drawChestText = function() {
     textFont(fontTextStartMenu);
     text("I need a key to open this chest !",side + oX + dx, side + oY + dy);
 };
-
-
 
 // ----------------------------------- DrawWorld ---------------------------------------
 var drawWorld = function() {
@@ -534,13 +588,29 @@ for (var j=0;j<allWorldsFront[iWX][iWY].length;j++){
         if (allWorldsFront[iWX][iWY][i][j] === 15) {
         drawMonsterGreen(i,j);
         }
-        // pnj
+        // pnjSword
         if (allWorldsFront[iWX][iWY][i][j] === 16) {
         drawPnjSwordSeller(i,j);
         }
-        // Draw Wall
+        // drawYellowGem 
+        if (allWorldsFront[iWX][iWY][i][j] === 17) {
+        drawYellowGem(i,j);
+        }
+        // pnjHeart
+        if (allWorldsFront[iWX][iWY][i][j] === 18) {
+        drawPnjHearts(i,j);
+        }
+        // Heart
+        if (allWorldsFront[iWX][iWY][i][j] === 19) {
+        drawHeartOnGround(i,j);
+        }
+        // Draw Wall  
         if (allWorldsFront[iWX][iWY][i][j] === 29) {
         drawWall(i,j);
+        }
+        // Draw Wall  
+        if (allWorldsFront[iWX][iWY][i][j] === 42) {
+        drawPnjWin(i,j);
         }
         
         
@@ -621,10 +691,18 @@ var drawOverlay = function() {
     if (allWorldsFront[iWX][iWY][hero[0]][hero[1]-1] === 6) {
         drawPnjText();    
     }
+    // pnjTextHearts
+    if (allWorldsFront[iWX][iWY][hero[0]][hero[1]-1] === 18) {
+        drawPnjTextHearts();    
+    }
     // pnjTextSwordSeller
     if (allWorldsFront[iWX][iWY][hero[0]][hero[1]-1] === 16) {
         drawPnjTextSwordSeller(); 
         drawSword(-160,-38,80);
+    }
+    // pnjTextSwordSeller
+    if (allWorldsFront[iWX][iWY][hero[0]][hero[1]-1] === 42) {
+        drawPnjTextWin();
     }
     
     
@@ -633,8 +711,11 @@ var drawOverlay = function() {
         drawChestText();    
     }
     // gameOver 
-    if (isDead === true) {
-        drawGameOver();
+    if (isDead) {
+        drawGameOver("You loose");
+    }
+    if (win) {
+        drawGameOver("You Win");
     }
     
 };
@@ -649,7 +730,7 @@ var fightMonster = function() {
         if (hero[0] < 7 && hero[0] > 0 && hero[1] < 7 && hero[1] > 0) {
             if (allWorldsFront[iWX][iWY][hero[0]][hero[1]-1] === monsters[i] || allWorldsFront[iWX][iWY][hero[0]][hero[1]+1] === monsters[i] || allWorldsFront[iWX][iWY][hero[0]+1][hero[1]] === monsters[i] || allWorldsFront[iWX][iWY][hero[0]-1][hero[1]] === monsters[i]) {
                 if (hasSword) {
-                    var fight = round(random(0,2));
+                    var fight = round(random(0,3));
                     if (fight > 1) {
                         killMonster();
                     } else {
@@ -678,6 +759,17 @@ var onGroundblueGem = function () {
     allWorldsFront[iWX][iWY][hero[0]][hero[1]] = 0;
 };
 
+var onGroundYellowGem = function () {
+    yellowGem++;
+    allWorldsFront[iWX][iWY][hero[0]][hero[1]] = 0;
+};
+
+var onGroundHeart = function () {
+    heart++;
+    allWorldsFront[iWX][iWY][hero[0]][hero[1]] = 0;
+};
+
+
 // ------------------- function check-ground ----------------------------------------------
 
 var checkGround = function () {
@@ -686,6 +778,12 @@ var checkGround = function () {
     }
     if (allWorldsFront[iWX][iWY][hero[0]][hero[1]] === 4){
         onGroundblueGem();
+    }
+    if (allWorldsFront[iWX][iWY][hero[0]][hero[1]] === 17){
+        onGroundYellowGem();
+    }
+    if (allWorldsFront[iWX][iWY][hero[0]][hero[1]] === 19){
+        onGroundHeart();
     }
 };
 // ------------------------------------------ Change World -------------------------------
@@ -757,9 +855,19 @@ keyPressed = function() {
         if (allWorldsFront[iWX][iWY][hero[0]][hero[1]-1] === 6 && blueGem > 2) {
             blueGem = blueGem - 3;
             greenGem++;
-        }if (allWorldsFront[iWX][iWY][hero[0]][hero[1]-1] === 16 && greenGem > 1) {
+        }
+        if (allWorldsFront[iWX][iWY][hero[0]][hero[1]-1] === 16 && greenGem > 1) {
             greenGem = greenGem - 2;
             hasSword = true;
+        }
+        if (allWorldsFront[iWX][iWY][hero[0]][hero[1]-1] === 18 && greenGem > 0) {
+            greenGem = greenGem - 1;
+            heart++;
+        }
+        if (allWorldsFront[iWX][iWY][hero[0]][hero[1]-1] === 42 && yellowGem > 3) {
+            yellowGem = 0;
+            win = true;
+            
         }
         
     }
@@ -771,7 +879,7 @@ keyPressed = function() {
             keyChest--;
         }
     }
-    if (key.toString() === ' ' && isDead) {
+    if ((key.toString() === ' ' && isDead) || (win)) {
         Program.restart();
     }
     
@@ -794,12 +902,12 @@ var draw = function() {
     checkDeath();
     
     
-    text(hero, 304, 25);
-    text(iWX, 366, 25);
-    text(iWY, 383,25);
-    text(fight, 257,25);
+    // text(hero, 304, 25);
+    // text(iWX, 366, 25);
+    // text(iWY, 383,25);
+    // text(fight, 257,25);
     
-    //text(allWorldsFront[iWX][iWY][hero[0]][hero[1]-1], 112 ,89);
+    // text(allWorldsFront[iWX][iWY][hero[0]][hero[1]-1], 112 ,89);
 
 };
 
